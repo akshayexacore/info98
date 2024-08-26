@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_button.dart';
@@ -35,15 +36,34 @@ class BannersScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  SizedBox(
-                    height: 180.h,
-                    width: double.infinity,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                      child: Image.network(
-                          fit: BoxFit.cover,
-                          "https://s3-alpha-sig.figma.com/img/2d9d/5694/1503b04af0728cee4429315aa028784f?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ItWrWrG43Faqr93L-5K3YzTiODWo5zpmCY9jTy1RXqC5FPefeWWd5sejjKZDmd5VHI8ZTie6m93ZINvHvF0LZMsidhi1lCXA~yOmp9~NYGzn~xLtD-NQWzpL1v4izD8uJwyMjoXFRoAe5gjzgrZhLnkuBu5iHMB6XB6ZiSrbb4WJT5NPRN981qhL20u15jgclKDe8tFrFJh6TginQ3cil1jBSRQIVZ3gJ6veT15f6cu8MoYlAB8nmI3vkPMKPsWeliktLXmRkZc1Rx3krKy4zu-DM7aKr7IS5AJar1YftNB1t~gqdQGeTaxg974dAdJUEE4HzyZ6CBh5CCLND8gmMg__"),
-                    ),
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 180.h,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                          child: Image.network(
+                              fit: BoxFit.cover,
+                              "https://s3-alpha-sig.figma.com/img/2d9d/5694/1503b04af0728cee4429315aa028784f?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ItWrWrG43Faqr93L-5K3YzTiODWo5zpmCY9jTy1RXqC5FPefeWWd5sejjKZDmd5VHI8ZTie6m93ZINvHvF0LZMsidhi1lCXA~yOmp9~NYGzn~xLtD-NQWzpL1v4izD8uJwyMjoXFRoAe5gjzgrZhLnkuBu5iHMB6XB6ZiSrbb4WJT5NPRN981qhL20u15jgclKDe8tFrFJh6TginQ3cil1jBSRQIVZ3gJ6veT15f6cu8MoYlAB8nmI3vkPMKPsWeliktLXmRkZc1Rx3krKy4zu-DM7aKr7IS5AJar1YftNB1t~gqdQGeTaxg974dAdJUEE4HzyZ6CBh5CCLND8gmMg__"),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: CircleAvatar(
+                            radius: 18.r,
+                            backgroundColor: AppColors.primary,
+                            child: Image.asset(
+                              "assets/images/delete_icon.png",
+                              height: 20.h,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 15.h,
@@ -61,8 +81,21 @@ class BannersScreen extends StatelessWidget {
                     title: "Description",
                     isBorder: false,
                   ),
-                  Spacer(),
-                  AppButton(text: "Add more")
+                  const Spacer(),
+                  AppButton(
+                    text: "Add more",
+                    busy: false,
+                    icon: Icons.camera_alt,
+                    onPressed: () {},
+                    style: AppButtonStyles.appButton.copyWith(
+                        backgroundColor:
+                            WidgetStatePropertyAll(AppColors.white)),
+                    textStyle: AppTextStyles.appButton
+                        .copyWith(color: AppColors.black),
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  )
                 ],
               ),
             ))

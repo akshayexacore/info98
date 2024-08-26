@@ -15,6 +15,7 @@ class AppButton extends StatelessWidget {
     this.width,
     this.height = AppSizes.appButtonHeight,
     this.busy = false,
+    this.icon,
     this.shadow = false,
     this.padding = 0.0,
   }) : super(key: key);
@@ -29,6 +30,7 @@ class AppButton extends StatelessWidget {
   final double? height;
   final bool busy;
   final bool shadow;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -42,27 +44,39 @@ class AppButton extends StatelessWidget {
         child: SizedBox(
           width: width,
           height: height,
-          child: Center(
-            child: !busy
-                ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.center,
-                      style: textStyle,
-                    ),
-                  )
-                : SizedBox(
-                    height: height,
-                    width: height,
-                    child: Padding(
-                      padding: EdgeInsets.all(height! > 40 ? 16.0 : 8),
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1,
-                        color: textStyle.color,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  color: AppColors.black,
+                ),
+                SizedBox(
+                  width: 10.w,
+                )
+              ],
+              !busy
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(horizontal: padding),
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: textStyle,
+                      ),
+                    )
+                  : SizedBox(
+                      height: height,
+                      width: height,
+                      child: Padding(
+                        padding: EdgeInsets.all(height! > 40 ? 16.0 : 8),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                          color: textStyle.color,
+                        ),
                       ),
                     ),
-                  ),
+            ],
           ),
         ),
       ),
