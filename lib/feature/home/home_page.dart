@@ -38,11 +38,12 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
+              const Text(
                 "Home",
                 style: AppTextStyles.appHeader,
               ),
-              TextButton(onPressed: _controller.logout, child: Text("Logout"))
+              TextButton(
+                  onPressed: _controller.logout, child: const Text("Logout"))
             ],
           ),
         ),

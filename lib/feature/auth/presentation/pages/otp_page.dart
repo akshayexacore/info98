@@ -5,16 +5,30 @@ import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_button.dart';
 import 'package:info_91_proj/feature/auth/controllers.dart/login_contoller.dart';
 import 'package:pinput/pinput.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
-class OtpPage extends StatelessWidget {
+class OtpPage extends StatefulWidget {
   OtpPage({Key? key}) : super(key: key);
 
   static const routeName = '/otp';
 
+  @override
+  State<OtpPage> createState() => _OtpPageState();
+}
+
+class _OtpPageState extends State<OtpPage> with CodeAutoFill {
   final _loginController = Get.find<LoginController>();
+  @override
+  void initState() {
+    super.initState();
+    listenForCode(); // Start listening for SMS code
+  }
 
   @override
   Widget build(BuildContext context) {
+    _loginController.textControllerOtp.text = Get.arguments['otp'].toString();
+
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         _loginController.cancelTimer();
@@ -37,10 +51,10 @@ class OtpPage extends StatelessWidget {
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.12,
                       child: Image.asset('assets/images/ic_enter_otp.png')),
-                  SizedBox(
+                  const SizedBox(
                     height: AppSpacings.xMedium,
                   ),
-                  Text(
+                  const Text(
                     "Enter verification code",
                     style: AppTextStyles.appTitle,
                   ),
@@ -142,5 +156,21 @@ class OtpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void codeUpdated() {
+    debugPrint("cghjcgfxhvhkjjhjghfghkj");
+    if (code != null) {
+      _loginController.textControllerOtp.text =
+          code ?? ""; // Automatically fill in the OTP
+    }
+  }
+
+  @override
+  void dispose() {
+    SmsAutoFill()
+        .unregisterListener(); // Stop listening when the widget is disposed
+    super.dispose();
   }
 }

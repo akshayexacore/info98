@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:info_91_proj/core/config/shared_preferences_data_provider.dart';
 import 'package:info_91_proj/core/utils/app_exception.dart';
@@ -7,6 +8,7 @@ import 'package:info_91_proj/feature/auth/data/user_repository.dart';
 import 'package:info_91_proj/feature/auth/presentation/pages/login_page.dart';
 import 'package:info_91_proj/feature/auth/presentation/pages/welcome_page.dart';
 import 'package:info_91_proj/feature/home/home_page.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/inform_group_chatlist_screen.dart';
 import 'package:info_91_proj/feature/profile/profile_page.dart';
 
 class AuthController extends GetxController {
@@ -42,7 +44,8 @@ class AuthController extends GetxController {
         if (response.user != null && response.user!.name.isEmpty) {
           Get.offAllNamed(ProfilePage.routeName);
         } else {
-          Get.offAllNamed(HomePage.routeName);
+          Get.offAll(() => InfoGroupChatListScreen());
+          // Get.offAllNamed(HomePage.routeName);
         }
       } else if (response.statusCode == 401) {
         gotoLoginPage();

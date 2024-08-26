@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:info_91_proj/core/config/app_styles.dart';
 
@@ -67,3 +69,14 @@ class AppButton extends StatelessWidget {
     );
   }
 }
+
+TextButton customTextButton(String buttonName, {required VoidCallback onTap}) =>
+    TextButton(
+        onPressed: onTap,
+        child: Text(
+          buttonName,
+          style: GoogleFonts.poppins(
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+              fontSize: 15.sp),
+        ));

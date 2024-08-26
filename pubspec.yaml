@@ -51,6 +51,10 @@ dependencies:
   image_cropper: ^8.0.1
   image_picker: ^1.1.2
   progress_dialog_null_safe: ^3.0.0
+  flutter_screenutil: ^5.9.3
+  toggle_switch: ^2.3.0
+  sms_autofill: ^2.4.0
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

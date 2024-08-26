@@ -56,7 +56,8 @@ class LoginController extends GetxController {
 
         if (response.isSuccess) {
           busy(false);
-          gotoOtpPage();
+          print("sdfghj${response.result["otp"].runtimeType}");
+          gotoOtpPage(response.result["otp"]);
         } else {
           busy(false);
           AppDialog.showSnackBar('Failed to send OTP',
@@ -121,8 +122,8 @@ class LoginController extends GetxController {
     }
   }
 
-  void gotoOtpPage() {
-    Get.toNamed(OtpPage.routeName);
+  void gotoOtpPage(int otp) {
+    Get.toNamed(OtpPage.routeName, arguments: {'otp': otp});
     startTimer(timerDuration1);
   }
 

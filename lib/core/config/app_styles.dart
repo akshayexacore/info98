@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+final marginWidth = 16.w;
 
 class AppFonts {
   static const primaryFontFamily = 'Poppins';
@@ -121,7 +124,7 @@ class AppTextStyles {
 
 class AppThemes {
   static final appTheme = ThemeData(
-    scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
+    scaffoldBackgroundColor: AppColors.splashBackground,
     fontFamily: AppFonts.primaryFontFamily,
     textTheme: textDefault,
     primaryColor: AppColors.primary,
