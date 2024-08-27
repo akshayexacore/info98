@@ -13,10 +13,25 @@ Text greyContentText(String text) {
   );
 }
 
-Text greyBoldText(String text) {
+Text greyBoldText(String text, {FontWeight? fontWeight}) {
   return Text(text,
       style: GoogleFonts.poppins(
           fontSize: 15.sp,
           color: AppColors.black.withOpacity(.75),
-          fontWeight: FontWeight.w500));
+          fontWeight: fontWeight ?? FontWeight.w500));
+}
+
+Widget blusHeading(String name) {
+  return Text(
+    name,
+    style: GoogleFonts.poppins(
+        color: AppColors.primary, fontWeight: FontWeight.w500, fontSize: 15.sp),
+  );
+}
+
+Widget greynonBoldText(String name, {double? size}) {
+  return Text(
+    name,
+    style: TextStyle(fontSize: size ?? 13.sp),
+  );
 }

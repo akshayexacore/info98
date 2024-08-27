@@ -4,12 +4,16 @@ import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_round_image.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_creation.page.dart';
-import 'package:info_91_proj/feature/information_groups/presentation/widgets/blue_heading_text.dart';
+
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_arrow_button.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
+  ProfileScreen({super.key});
+  List<popupMenuModel> listModel = [
+    popupMenuModel(name: "Create Group", value: 1)
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +24,8 @@ class ProfileScreen extends StatelessWidget {
             CustomAppBar(
               imageUrl: "",
               actionWidget: [
-                PopupMenuButton<int>(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  offset: Offset(0, 40.h),
-                  onSelected: (value) {
+                CustomPopupmenu(
+                  onSelected: (val) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -33,16 +33,7 @@ class ProfileScreen extends StatelessWidget {
                               const InformGroupCreationScreen(),
                         ));
                   },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 1,
-                      child: Text('Create Group'),
-                    ),
-                  ],
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.white,
-                  ),
+                  itemList: listModel,
                 ),
               ],
               appBarName: "Group Profile",

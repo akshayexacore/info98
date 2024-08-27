@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/banners_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/group_info_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class ChatScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const BannersScreen(),
+                        builder: (context) => GroupInfo(),
                       ));
                 },
                 appBarName: "Information Groups",
