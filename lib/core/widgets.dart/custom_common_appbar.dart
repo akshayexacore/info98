@@ -56,13 +56,13 @@ class CustomAppBar extends StatelessWidget {
                 },
               ),
               SizedBox(
-                width: 5.h,
+                width: 5.w,
               ),
               if (isPic) ...[
                 circle_image("https://randomuser.me/api/portraits/women/1.jpg",
                     onTap: imageOntap),
-                const SizedBox(
-                  width: 5,
+                 SizedBox(
+                  width: 10.w,
                 ),
               ],
               Text(appBarName,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget circle_image(String avatarUrl, {Function? onTap, double radius = 25}) {
+Widget circle_image(String avatarUrl, {Function? onTap, double radius = 18}) {
   return InkWell(
     onTap: () {
       if (onTap != null) {

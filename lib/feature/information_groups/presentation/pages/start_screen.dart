@@ -4,8 +4,10 @@ import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_button.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/banners_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/info_group_chat_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_scaffold.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/icon.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/profile_top_image_sec.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
 
@@ -43,7 +45,17 @@ class StartScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: AppColors.text,
                       size: 15.sp),
-                  Spacer()
+                  Spacer(),
+                  clickebleIcon("assets/images/youtube.png", () {}),
+                  SizedBox(
+                    width: 12.w,
+                  ),
+                  clickebleIcon("assets/images/world.png", () {}),
+                  SizedBox(
+                    width: 12.w,
+                  ),
+                  clickebleIcon("assets/images/map.png", () {}),
+                  
                 ],
               ),
               SizedBox(
@@ -78,7 +90,8 @@ class StartScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: AppButton(
-                      text: "Contact",isBorder:true,
+                      text: "Contact",
+                      isBorder: true,
                       busy: false,
                       onPressed: () {},
                       style: AppButtonStyles.appButton.copyWith(
@@ -87,15 +100,19 @@ class StartScreen extends StatelessWidget {
                       textStyle: AppTextStyles.appButton
                           .copyWith(color: AppColors.black),
                     ),
-                  ),SizedBox(width: 10.w,),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
                   Expanded(
                     child: AppButton(
                       text: "Join Group",
                       busy: false,
-                      onPressed: () {},
+                      onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(),));},
                       style: AppButtonStyles.appButton.copyWith(
-                          backgroundColor:
-                              WidgetStatePropertyAll(AppColors.secondary,)),
+                          backgroundColor: WidgetStatePropertyAll(
+                        AppColors.secondary,
+                      )),
                       textStyle: AppTextStyles.appButton
                           .copyWith(color: AppColors.white),
                     ),
