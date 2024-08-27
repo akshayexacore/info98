@@ -13,11 +13,11 @@ Text greyContentText(String text) {
   );
 }
 
-Text greyBoldText(String text, {FontWeight? fontWeight}) {
+Text greyBoldText(String text, {FontWeight? fontWeight,double? size,Color? color}) {
   return Text(text,
       style: GoogleFonts.poppins(
-          fontSize: 15.sp,
-          color: AppColors.black.withOpacity(.75),
+          fontSize:size??15.sp,
+          color:color?? AppColors.black.withOpacity(.75),
           fontWeight: fontWeight ?? FontWeight.w500));
 }
 

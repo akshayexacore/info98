@@ -96,7 +96,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  CustomAroowTextbutton(
+                  CustomArrowTextbutton(
                     toptitle: "Validity palns",
                     buttonName: "Group info",
                     onTap: () {

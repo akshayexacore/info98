@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
 
-class CustomAroowTextbutton extends StatelessWidget {
+class CustomArrowTextbutton extends StatelessWidget {
   final String buttonName;
   final String? toptitle;
   final VoidCallback onTap;
   final IconData? icon;
-  const CustomAroowTextbutton(
+  const CustomArrowTextbutton(
       {super.key,
       required this.buttonName,
       this.toptitle,
