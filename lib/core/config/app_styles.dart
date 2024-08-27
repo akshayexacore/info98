@@ -218,6 +218,7 @@ class AppColors {
   static const secondary = Color(0xffFF7500);
   static const primaryAccent = primary;
   static const text = Color(0xff333333);
+   static const borderClr = Color(0xffCCCCCC);
   static const lightText = Color(0xFF897B86);
   static const border = Color.fromRGBO(0, 0, 0, 0.25);
   static const textContent = Color(0xFF848484);

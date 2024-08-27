@@ -5,12 +5,12 @@ import 'package:info_91_proj/core/tiny/app_round_image.dart';
 class ProfileTopImageSec extends StatelessWidget {
   final String backGroundImage;
   final String profileImage;
-  final bool isAdmin;
+  final bool isAdmin;final bool isProfile;
   const ProfileTopImageSec(
       {super.key,
       required this.backGroundImage,
       required this.profileImage,
-      this.isAdmin = false});
+      this.isAdmin = false,this.isProfile=true});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class ProfileTopImageSec extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
+      if(isProfile)  Positioned(
           top: 152.h,
           left: 18.w,
           child: Stack(   clipBehavior: Clip.none,

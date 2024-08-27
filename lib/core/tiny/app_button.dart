@@ -15,14 +15,14 @@ class AppButton extends StatelessWidget {
     this.width,
     this.height = AppSizes.appButtonHeight,
     this.busy = false,
-    this.icon,
+    this.icon,this.isBorder=false,
     this.shadow = false,
     this.padding = 0.0,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
   final String text;
-  final ButtonStyle? style;
+  final ButtonStyle? style;final bool isBorder;
   final ButtonStyle? disabledStyle;
   final TextStyle textStyle;
   final double? width;
@@ -35,7 +35,7 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: shadow ? BoxDecoration(boxShadow: [AppShadows.shadow]) : null,
+      decoration: shadow ? BoxDecoration(boxShadow: [AppShadows.shadow]) :isBorder? BoxDecoration(border: Border.all(color: AppColors.borderClr)): null,
       child: TextButton(
         onPressed: !busy ? onPressed : null,
         style: onPressed != null
