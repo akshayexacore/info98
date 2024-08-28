@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_divider.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
@@ -7,6 +8,7 @@ import 'package:info_91_proj/feature/information_groups/presentation/pages/info_
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/start_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/chat_list_card.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -62,19 +64,8 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
               CustomAppBar(
                 appBarName: "Information Groups",
                 isTextield: true,
-                actionWidget: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => InformGroupCreationScreen(),
-                            ));
-                      },
-                      icon: const Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                      ))
+                actionWidget: [CustomPopupmenu(onSelected: (val){if(val==1){Navigator.push(context, MaterialPageRoute(builder: (context) => InformGroupCreationScreen(),));}}, itemList: [popupMenuModel(name: "Create group",value: 1)],)
+               
                 ],
               ),
               const SizedBox(

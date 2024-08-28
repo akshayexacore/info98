@@ -225,7 +225,8 @@ class AppColors {
   static const textSubtitle = Color(0xFF2D2D2D);
   static const textCategory = Color(0xFF3E3E3E);
   static const textMainSubtitle = Color(0xFF737373);
-  static const divider = Color(0xFFADADAD);
+  static const divider = Color(0xFFADADAD); 
+  static const dividerlight = Color(0xFFDADADA);
   static const primaryAppSwatch = MaterialColor(0xFF5c2a7a, color);
   static const scaffoldBackgroundColor = Colors.white;
   static const white = Colors.white;

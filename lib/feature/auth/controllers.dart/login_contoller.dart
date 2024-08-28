@@ -11,6 +11,7 @@ import 'package:info_91_proj/feature/auth/data/user_repository.dart';
 import 'package:info_91_proj/feature/auth/presentation/pages/login_page.dart';
 import 'package:info_91_proj/feature/auth/presentation/pages/otp_page.dart';
 import 'package:info_91_proj/feature/auth/presentation/widgets/login_success_dialog.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/inform_group_chatlist_screen.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 class LoginController extends GetxController {
@@ -76,6 +77,7 @@ class LoginController extends GetxController {
   }
 
   void gotoLoginPage() {
+    // Get.off(InfoGroupChatListScreen());
     Get.offAllNamed(LoginPage.routeName);
   }
 

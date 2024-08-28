@@ -31,7 +31,7 @@ class CustomArrowTextbutton extends StatelessWidget {
           child: Container(
               padding: EdgeInsets.all(15.w),
               decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: AppColors.dividerlight,
                   borderRadius: BorderRadius.circular(10)),
               child: Row(
                 children: [

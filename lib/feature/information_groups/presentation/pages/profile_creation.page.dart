@@ -97,8 +97,8 @@ class InformGroupCreationScreen extends StatelessWidget {
                     height: 15.h,
                   ),
                   CustomArrowTextbutton(
-                    toptitle: "Validity palns",
-                    buttonName: "Group info",
+                    toptitle: "Choose packages",
+                    buttonName: "Validity palns",
                     onTap: () {
                       Navigator.push(
                           context,
@@ -106,6 +106,9 @@ class InformGroupCreationScreen extends StatelessWidget {
                             builder: (context) => const ValidityScreen(),
                           ));
                     },
+                  ),
+                  SizedBox(
+                    height: 15.h,
                   ),
                 ],
               ),

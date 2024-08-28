@@ -33,13 +33,15 @@ class AuthRepository {
   }
 
   Future<BaseResponse> sendOtp(String phone, String code) async {
-    var body = {'phone_number': phone, "country_code": code};
-    print(body);
+    var body = {'phone_number':code+ phone, "country_code": code};
+    try{print(body);
     final response =
         await _api.post(ApiConstants.sendOtp, body: body, headers: {});
-    print("response$response");
+  
     AppDialog.showToast((response['otp'] ?? '').toString());
-    return BaseResponse.fromJson(response);
+    return BaseResponse.fromJson(response);}catch(e)
+    {;
+      throw(e);}
   }
 
   Future<BaseResponse> reSendOtp(String phone, String code) async {

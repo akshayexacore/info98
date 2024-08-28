@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/image_view.dart';
 import 'package:info_91_proj/core/utils/app_validator.dart';

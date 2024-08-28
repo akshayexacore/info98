@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'package:get/get.dart' hide MultipartFile, Response;
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/http_methods.dart';
