@@ -4,6 +4,7 @@ import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_divider.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/info_group_chat_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/start_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/chat_list_card.dart';
 
@@ -63,7 +64,13 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
                 isTextield: true,
                 actionWidget: [
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InformGroupCreationScreen(),
+                            ));
+                      },
                       icon: const Icon(
                         Icons.more_vert,
                         color: Colors.white,

@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_round_image.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/group_info_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_creation.page.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_setting_screen.dart';
 
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
@@ -14,7 +16,7 @@ import '../widgets/profile_top_image_sec.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
   List<popupMenuModel> listModel = [
-    popupMenuModel(name: "Create Group", value: 1)
+    popupMenuModel(name: "Group Setting", value: 1)
   ];
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,7 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const InformGroupCreationScreen(),
+                          builder: (context) => ProfileSettingScreen(),
                         ));
                   },
                   itemList: listModel,
@@ -44,7 +45,12 @@ class ProfileScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    ProfileTopImageSec(profileImage: "https://s3-alpha-sig.figma.com/img/35e8/9d9d/e5b9d1d23149590ef05ef35d5019c1af?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qqj9NDxLQ62C0Qg6~MQQSZ5GaRk~u1~DGuRCFkGIyzxIl9ro~QiH7sKpqES3Vfh2Vz5rHPZZq-Xrq9vaz840HBavPUgmr34V3lTXCeUFze9Sg1lXyvkmXSqqyfDnQiJegGLhcnDZP30ip7Wo77D-YFZhJlDKg58UjFcyr80mbwpErKO0YaT-ndZOroyuXHDiH6oBJwj-odwRH55Vlaaj5TTraPFHMchFJhJ1dv6atYIIwFyukiF2HplWCzSrtwLJZtWY9DxPb-WNP37NSQTFOROBZ-lwJv7svxE7zMkQWeD5lLjhxTWUGCMMqCwGnHVouLxxO8E0Y5CD~z1db~6aeQ__",backGroundImage: "https://s3-alpha-sig.figma.com/img/7eb1/5aa2/b39983facffc91323415afccde962741?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=PbxqfDILQLOB0-ETRJgaATBQU3sldAIlUTDruqdVGAPlwcRlsKyX~7Sh~XSg2X2dUal7MZ80cc6ULwfeguls0jYhaR1IR0W1LdNPfrsJuJmfK3RPiGHoD~AHnwDyS~DvR1gUNG4Vzz4G8YT~abKe5-PttZV2HK6br-sQhn4fc99~Vqc3Et2Xhlbi0DSLJTC4HoE1~aSfb7DZYwKrjGA2WDNbJMHkeVh0SQSNDuELxHBkZIaXDCAkM4SdgXUYyI8BHRN~5Y5dYfUeKWDcorpSbo4bTiVN14Lx4A-9kgyZxKtRrUxjJfOu3fz5S3S09qrLCTkr5-TJ6HsuQ0vRxkw7Ig__",),
+                    ProfileTopImageSec(
+                      profileImage:
+                          "https://s3-alpha-sig.figma.com/img/35e8/9d9d/e5b9d1d23149590ef05ef35d5019c1af?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qqj9NDxLQ62C0Qg6~MQQSZ5GaRk~u1~DGuRCFkGIyzxIl9ro~QiH7sKpqES3Vfh2Vz5rHPZZq-Xrq9vaz840HBavPUgmr34V3lTXCeUFze9Sg1lXyvkmXSqqyfDnQiJegGLhcnDZP30ip7Wo77D-YFZhJlDKg58UjFcyr80mbwpErKO0YaT-ndZOroyuXHDiH6oBJwj-odwRH55Vlaaj5TTraPFHMchFJhJ1dv6atYIIwFyukiF2HplWCzSrtwLJZtWY9DxPb-WNP37NSQTFOROBZ-lwJv7svxE7zMkQWeD5lLjhxTWUGCMMqCwGnHVouLxxO8E0Y5CD~z1db~6aeQ__",
+                      backGroundImage:
+                          "https://s3-alpha-sig.figma.com/img/7eb1/5aa2/b39983facffc91323415afccde962741?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=PbxqfDILQLOB0-ETRJgaATBQU3sldAIlUTDruqdVGAPlwcRlsKyX~7Sh~XSg2X2dUal7MZ80cc6ULwfeguls0jYhaR1IR0W1LdNPfrsJuJmfK3RPiGHoD~AHnwDyS~DvR1gUNG4Vzz4G8YT~abKe5-PttZV2HK6br-sQhn4fc99~Vqc3Et2Xhlbi0DSLJTC4HoE1~aSfb7DZYwKrjGA2WDNbJMHkeVh0SQSNDuELxHBkZIaXDCAkM4SdgXUYyI8BHRN~5Y5dYfUeKWDcorpSbo4bTiVN14Lx4A-9kgyZxKtRrUxjJfOu3fz5S3S09qrLCTkr5-TJ6HsuQ0vRxkw7Ig__",
+                    ),
                     SizedBox(
                       height: 60.h,
                     ),
@@ -53,10 +59,10 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        greyBoldText("Group Name",
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.text,
-                        size: 16.sp),
+                          greyBoldText("Group Name",
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.text,
+                              size: 16.sp),
                           SizedBox(
                             height: 10.h,
                           ),
@@ -98,7 +104,13 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           CustomArrowTextbutton(
                             buttonName: "Group info",
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GroupInfo(),
+                                  ));
+                            },
                           ),
                           SizedBox(
                             height: 14.h,
@@ -107,7 +119,7 @@ class ProfileScreen extends StatelessWidget {
                           SizedBox(
                             height: 5.h,
                           ),
-                        const  BannersImageView(),
+                          const BannersImageView(),
                           SizedBox(
                             height: 5.h,
                           ),
@@ -188,8 +200,7 @@ class BannersImageView extends StatelessWidget {
         child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       height: 100.h,
@@ -209,8 +220,7 @@ class BannersImageView extends StatelessWidget {
                     greynonBoldText("Description"),
                   ],
                 ),
-            separatorBuilder: (context, index) =>
-                SizedBox(
+            separatorBuilder: (context, index) => SizedBox(
                   width: 18.w,
                 ),
             itemCount: 5));
