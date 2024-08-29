@@ -11,6 +11,7 @@ import 'package:info_91_proj/feature/information_groups/presentation/widgets/cus
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
 
+import '../widgets/custom_image_card.dart';
 import '../widgets/profile_top_image_sec.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -18,6 +19,12 @@ class ProfileScreen extends StatelessWidget {
   List<popupMenuModel> listModel = [
     popupMenuModel(name: "Group Setting", value: 1)
   ];
+  List MediaList = [
+    "https://s3-alpha-sig.figma.com/img/15c4/bf2a/faa786897f95b8eb7e0f22b36d2884b8?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ObdzlxyzfSXhZ5l15bpmN-Rk4a~BmYeLvBIHhwnpc5lC9vEbhOJtUptUXPV0J~brLA52D-VO~KKn8hy8ua9F4hJbS5-jo0kh2vuJnzjohK12voc4sNt-6tT2POy~NUxoKf2~oVJugr0TU-gqa1wS4qGq-x~FccYkozpSI9YAjmslx73Gqfo~oBsRs1j77H3Ct4GMycedDachvoo~CKQ5dHeOxgCGpcaJe9lcJgrwOK0P4Itk5gL5s1iO-AXxPRRtUceETV7afE8C2DY4z20pi8qVP9KzbZgcjDpxV5wUiy9aqUhjLNaIAJZZD~txbK7nhRQkVdAbcshL6UvhE7s~CQ__",
+    "https://s3-alpha-sig.figma.com/img/465d/b729/9dfb8d4f18cb1d69d607a7a44403f023?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=d91oVlG0AXBJd~WzAfpfEZPuVcIVWLvnMQgscZ1DPK-PQksU5XDE01Wv9Q1kLGzUtIqBgi5p~9Xi7OWsrghTtM7INVMd8ZYOU1jzvgZFMYzXaJbhCgBXNS9ujCH2e1omJKr~mEI2o9J3Dvu4uyI-6pwCavg~Vc7qdubycWVMmwoZfYeIwdxFs1WfUUrItWNWlBRgGB-yiylRM3MT7rwu8X8Dv32DXSy7zADzBw9Uls~yamr9BlwgzYNXC0QkvF3sj5w3bm398D2P~NBaa2RNr3T~ZmJAsqsMa8H4fjnqSTZgUQOErxjotOY1k1O~c5AfZeRhoP3bE9fTT4UI1kn9Hg__",
+    "https://s3-alpha-sig.figma.com/img/e787/7b6b/1e1d619c6f167a5ac7cab9d654d200df?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cYz0Mk~dKA2ECJmKDZFgSP12Caj~yiLmbAocs6LOjFN42hBQbbS-LQewU3d8Z9j1XZttqkc39BLGvAElvIYlZirpz8GOkPM0lsb~r-HXHXydT8muu7n2cq8-OuEC6QFCETIcsy4ys8zAimFfR8BQSUKAVrV4UKajmHHr-r4GwNgenBH7kw7PomD-6Le0oiSKWd8XSuI1m8V7BG793MNHShbhatJiuwR4UddyvrxNMvovWHR2qZQb8ms27CSxVRILNWtVH4DgKCAjZtT78Rvyi3HkhLqype29VOjNT3Jq~sviJY7Czqt8DveBQ2Mi1U~uQLRhjtKrAC~v3VhKJnqX8Q__"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                           "https://s3-alpha-sig.figma.com/img/7eb1/5aa2/b39983facffc91323415afccde962741?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=PbxqfDILQLOB0-ETRJgaATBQU3sldAIlUTDruqdVGAPlwcRlsKyX~7Sh~XSg2X2dUal7MZ80cc6ULwfeguls0jYhaR1IR0W1LdNPfrsJuJmfK3RPiGHoD~AHnwDyS~DvR1gUNG4Vzz4G8YT~abKe5-PttZV2HK6br-sQhn4fc99~Vqc3Et2Xhlbi0DSLJTC4HoE1~aSfb7DZYwKrjGA2WDNbJMHkeVh0SQSNDuELxHBkZIaXDCAkM4SdgXUYyI8BHRN~5Y5dYfUeKWDcorpSbo4bTiVN14Lx4A-9kgyZxKtRrUxjJfOu3fz5S3S09qrLCTkr5-TJ6HsuQ0vRxkw7Ig__",
                     ),
                     SizedBox(
-                      height: 60.h,
+                      height: 50.h,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: marginWidth),
@@ -66,18 +73,15 @@ class ProfileScreen extends StatelessWidget {
                           SizedBox(
                             height: 10.h,
                           ),
-                          blusHeading("About us"),
+                          blusHeading("About Us"),
                           SizedBox(
-                            height: 8.h,
+                            height: 10.h,
                           ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          const Text(
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
+                          greyBoldText(
+                              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+                              color: AppColors.text,
+                              size: 15.sp),
+
                           SizedBox(
                             height: 15.h,
                           ),
@@ -97,7 +101,13 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           Container(
                             height: 100.h,
-                            color: Colors.red,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) => customImageCard(
+                                  imageUrl:
+                                      MediaList[index],width:110.w ,),
+                              itemCount: MediaList.length,
+                            ),
                           ),
                           SizedBox(
                             height: 14.h,
@@ -202,13 +212,9 @@ class BannersImageView extends StatelessWidget {
             itemBuilder: (context, index) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 100.h,
-                      width: 170.w,
-                      child: Image.network(
-                        "https://th.bing.com/th?id=OIP.qn_LIjRBjyml3lSSiw6oHwHaE7&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
-                        fit: BoxFit.cover,
-                      ),
+                    customImageCard(
+                      imageUrl:
+                          "https://th.bing.com/th?id=OIP.qn_LIjRBjyml3lSSiw6oHwHaE7&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
                     ),
                     SizedBox(
                       height: 5.h,

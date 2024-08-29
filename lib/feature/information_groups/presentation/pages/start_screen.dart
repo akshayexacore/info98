@@ -44,22 +44,22 @@ class StartScreen extends StatelessWidget {
                   greyBoldText("Group Name",
                       fontWeight: FontWeight.bold,
                       color: AppColors.text,
-                      size: 15.sp),
+                      size: 16.sp),
                   Spacer(),
                   clickebleIcon("assets/images/youtube.png", () {}),
                   SizedBox(
-                    width: 12.w,
+                    width: 20.w,
                   ),
                   clickebleIcon("assets/images/world.png", () {}),
                   SizedBox(
-                    width: 12.w,
+                    width: 20.w,
                   ),
                   clickebleIcon("assets/images/map.png", () {}),
                   
                 ],
               ),
               SizedBox(
-                height: 15.h,
+                height: 8.h,
               ),
               greyContentText(
                 "1k members",
@@ -71,7 +71,7 @@ class StartScreen extends StatelessWidget {
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
                   fontWeight: FontWeight.w400,
                   color: AppColors.text,
-                  size: 15.sp),
+                  size: 13.sp),
               SizedBox(
                 height: 15.h,
               ),
@@ -83,15 +83,15 @@ class StartScreen extends StatelessWidget {
                 height: 15.h,
               ),
               const BannersImageView(),
-              SizedBox(
-                height: 15.h,
+              Spacer(
+              
               ),
               Row(
                 children: [
                   Expanded(
                     child: AppButton(
                       text: "Contact",
-                      isBorder: true,
+                      // isBorder: true,
                       busy: false,
                       onPressed: () {},
                       style: AppButtonStyles.appButton.copyWith(
@@ -118,7 +118,10 @@ class StartScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
+                SizedBox(
+                height: 10.h,
+              ),
             ],
           ),
         ))

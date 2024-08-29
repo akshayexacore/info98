@@ -26,7 +26,7 @@ class _OtpPageState extends State<OtpPage> with CodeAutoFill {
 
   @override
   Widget build(BuildContext context) {
-    _loginController.textControllerOtp.text = Get.arguments['otp'].toString();
+    // _loginController.textControllerOtp.text = Get.arguments['otp'].toString();
 
     // ignore: deprecated_member_use
     return WillPopScope(
