@@ -133,7 +133,7 @@ class ProfileScreen extends StatelessWidget {
                           SizedBox(
                             height: 5.h,
                           ),
-                          const BannersImageView(),
+                           BannersImageView(imageList: ["https://s3-alpha-sig.figma.com/img/674c/ebe1/163a0f5534eb6b60ce27af5086f6ae3a?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=f3Zlm-vw8Gzwn-vet56Tad0r-KT7WJvXsBnWTA~egXkr1CfmpO8YJt0wlXNjHyVU3dwmWWckJ4F41HIqeVh~h4yRyPQBeOXBOHfFWgocKLk-eXTtxSzJU2GpEA-pQRwDZw~oI5UR4UYb47~vzB14Itvt9Ry8U8MuAqfPYdJEcyYj5QAQUWW9xYf7ZOAxFHlfG~40i38GI1aSHp8gEKq5ycdfG~gHkjSuZN~M7lkiEi99NC0S2DB1nHmChYJwKGhjmPYb8xVVwXqWOsMJgo~eOs7ABun2UE9yXt8Z6xkx-lV0OBcmF6RzihWOCrfI3VAvNj45p-j2SKZyPcQ40l28nQ__",""],),
                           SizedBox(
                             height: 5.h,
                           ),
@@ -203,36 +203,42 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class BannersImageView extends StatelessWidget {
-  const BannersImageView({
-    super.key,
+  final List<String>imageList;
+  
+      BannersImageView({
+    super.key, required this.imageList,
   });
-
+ final PageController _pageController = PageController(
+    viewportFraction: 0.95,keepPage: false // Set this to less than 1.0 to show the next page
+  );
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 160.h,
-        child: ListView.separated(
+        height:200.h,
+        child: PageView.builder(controller: _pageController,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    customImageCard(
-                      imageUrl:
-                          "https://th.bing.com/th?id=OIP.qn_LIjRBjyml3lSSiw6oHwHaE7&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    greynonBoldText("Title"),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    greynonBoldText("Description"),
-                  ],
-                ),
-            separatorBuilder: (context, index) => SizedBox(
-                  width: 18.w,
-                ),
-            itemCount: 5));
+            itemCount:imageList.length,
+            itemBuilder: (context, index) => Padding(
+              padding:  EdgeInsets.only(right: 10.0),
+              child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      customImageCard(width: double.infinity,height: 150.h,
+                        imageUrl:
+                            imageList[index],
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      greynonBoldText("Title"),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      greynonBoldText("Description"),
+                    ],
+                  ),
+            ),
+         
+           ));
   }
 }

@@ -139,7 +139,7 @@ class ProfileSettingScreen extends StatelessWidget {
                         color: AppColors.text,
                         size: 16.sp),
                     constGap,
-                    const BannersImageView(),
+                     BannersImageView( imageList: [""],),
                     CustomArrowTextbutton(
                         buttonName: "Add Banners",
                         onTap: () {
