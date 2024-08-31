@@ -7,6 +7,7 @@ import 'package:info_91_proj/feature/information_groups/presentation/pages/banne
 import 'package:info_91_proj/feature/information_groups/presentation/pages/info_group_chat_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_scaffold.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/expandable_widget.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/icon.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/profile_top_image_sec.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
@@ -31,10 +32,11 @@ class StartScreen extends StatelessWidget {
               "https://s3-alpha-sig.figma.com/img/35e8/9d9d/e5b9d1d23149590ef05ef35d5019c1af?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qqj9NDxLQ62C0Qg6~MQQSZ5GaRk~u1~DGuRCFkGIyzxIl9ro~QiH7sKpqES3Vfh2Vz5rHPZZq-Xrq9vaz840HBavPUgmr34V3lTXCeUFze9Sg1lXyvkmXSqqyfDnQiJegGLhcnDZP30ip7Wo77D-YFZhJlDKg58UjFcyr80mbwpErKO0YaT-ndZOroyuXHDiH6oBJwj-odwRH55Vlaaj5TTraPFHMchFJhJ1dv6atYIIwFyukiF2HplWCzSrtwLJZtWY9DxPb-WNP37NSQTFOROBZ-lwJv7svxE7zMkQWeD5lLjhxTWUGCMMqCwGnHVouLxxO8E0Y5CD~z1db~6aeQ__",
         ),
         Expanded(
-            child: Padding(
+            child: Container(height: double.infinity,
+             
           padding: EdgeInsets.symmetric(horizontal: marginWidth),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: 15.h,
@@ -55,7 +57,6 @@ class StartScreen extends StatelessWidget {
                     width: 20.w,
                   ),
                   clickebleIcon("assets/images/map.png", () {}),
-                  
                 ],
               ),
               SizedBox(
@@ -67,11 +68,10 @@ class StartScreen extends StatelessWidget {
               SizedBox(
                 height: 15.h,
               ),
-              greyBoldText(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.text,
-                  size: 13.sp),
+              ExpandableTextWidget(
+                text:
+                    "Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+              ),
               SizedBox(
                 height: 15.h,
               ),
@@ -83,48 +83,55 @@ class StartScreen extends StatelessWidget {
                 height: 15.h,
               ),
               const BannersImageView(),
-              Spacer(
-              
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppButton(
-                      text: "Contact",
-                      // isBorder: true,
-                      busy: false,
-                      onPressed: () {},
-                      style: AppButtonStyles.appButton.copyWith(
-                          backgroundColor:
-                              WidgetStatePropertyAll(AppColors.white)),
-                      textStyle: AppTextStyles.appButton
-                          .copyWith(color: AppColors.black),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Expanded(
-                    child: AppButton(
-                      text: "Join Group",
-                      busy: false,
-                      onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(),));},
-                      style: AppButtonStyles.appButton.copyWith(
-                          backgroundColor: WidgetStatePropertyAll(
-                        AppColors.secondary,
-                      )),
-                      textStyle: AppTextStyles.appButton
-                          .copyWith(color: AppColors.white),
-                    ),
-                  ),
-                ],
-              ),
-                SizedBox(
-                height: 10.h,
-              ),
+              Spacer(),
+        
             ],
           ),
-        ))
+        )),      Padding(
+          padding:  EdgeInsets.symmetric(horizontal: marginWidth),
+          child: Row(
+                  children: [
+                    Expanded(
+                      child: AppButton(
+                        text: "Contact",
+                        // isBorder: true,
+                        busy: false,
+                        onPressed: () {},
+                        style: AppButtonStyles.appButton.copyWith(
+                            backgroundColor:
+                                WidgetStatePropertyAll(AppColors.white)),
+                        textStyle: AppTextStyles.appButton
+                            .copyWith(color: AppColors.black),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Expanded(
+                      child: AppButton(
+                        text: "Join Group",
+                        busy: false,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(),
+                              ));
+                        },
+                        style: AppButtonStyles.appButton.copyWith(
+                            backgroundColor: WidgetStatePropertyAll(
+                          AppColors.secondary,
+                        )),
+                        textStyle: AppTextStyles.appButton
+                            .copyWith(color: AppColors.white),
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+              SizedBox(
+                height: 10.h,
+              ),
       ],
     );
   }

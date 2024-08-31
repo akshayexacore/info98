@@ -84,7 +84,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const StartScreen(),
+                            builder: (context) =>  StartScreen(),
                           ));
                     },
                   ),

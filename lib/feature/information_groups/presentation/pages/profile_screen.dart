@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_round_image.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/gfallery_view_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/group_info_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_setting_screen.dart';
@@ -19,10 +20,13 @@ class ProfileScreen extends StatelessWidget {
   List<popupMenuModel> listModel = [
     popupMenuModel(name: "Group Setting", value: 1)
   ];
-  List MediaList = [
+  List<String> MediaList = [
     "https://s3-alpha-sig.figma.com/img/15c4/bf2a/faa786897f95b8eb7e0f22b36d2884b8?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ObdzlxyzfSXhZ5l15bpmN-Rk4a~BmYeLvBIHhwnpc5lC9vEbhOJtUptUXPV0J~brLA52D-VO~KKn8hy8ua9F4hJbS5-jo0kh2vuJnzjohK12voc4sNt-6tT2POy~NUxoKf2~oVJugr0TU-gqa1wS4qGq-x~FccYkozpSI9YAjmslx73Gqfo~oBsRs1j77H3Ct4GMycedDachvoo~CKQ5dHeOxgCGpcaJe9lcJgrwOK0P4Itk5gL5s1iO-AXxPRRtUceETV7afE8C2DY4z20pi8qVP9KzbZgcjDpxV5wUiy9aqUhjLNaIAJZZD~txbK7nhRQkVdAbcshL6UvhE7s~CQ__",
     "https://s3-alpha-sig.figma.com/img/465d/b729/9dfb8d4f18cb1d69d607a7a44403f023?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=d91oVlG0AXBJd~WzAfpfEZPuVcIVWLvnMQgscZ1DPK-PQksU5XDE01Wv9Q1kLGzUtIqBgi5p~9Xi7OWsrghTtM7INVMd8ZYOU1jzvgZFMYzXaJbhCgBXNS9ujCH2e1omJKr~mEI2o9J3Dvu4uyI-6pwCavg~Vc7qdubycWVMmwoZfYeIwdxFs1WfUUrItWNWlBRgGB-yiylRM3MT7rwu8X8Dv32DXSy7zADzBw9Uls~yamr9BlwgzYNXC0QkvF3sj5w3bm398D2P~NBaa2RNr3T~ZmJAsqsMa8H4fjnqSTZgUQOErxjotOY1k1O~c5AfZeRhoP3bE9fTT4UI1kn9Hg__",
-    "https://s3-alpha-sig.figma.com/img/e787/7b6b/1e1d619c6f167a5ac7cab9d654d200df?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cYz0Mk~dKA2ECJmKDZFgSP12Caj~yiLmbAocs6LOjFN42hBQbbS-LQewU3d8Z9j1XZttqkc39BLGvAElvIYlZirpz8GOkPM0lsb~r-HXHXydT8muu7n2cq8-OuEC6QFCETIcsy4ys8zAimFfR8BQSUKAVrV4UKajmHHr-r4GwNgenBH7kw7PomD-6Le0oiSKWd8XSuI1m8V7BG793MNHShbhatJiuwR4UddyvrxNMvovWHR2qZQb8ms27CSxVRILNWtVH4DgKCAjZtT78Rvyi3HkhLqype29VOjNT3Jq~sviJY7Czqt8DveBQ2Mi1U~uQLRhjtKrAC~v3VhKJnqX8Q__"
+    "https://s3-alpha-sig.figma.com/img/e787/7b6b/1e1d619c6f167a5ac7cab9d654d200df?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cYz0Mk~dKA2ECJmKDZFgSP12Caj~yiLmbAocs6LOjFN42hBQbbS-LQewU3d8Z9j1XZttqkc39BLGvAElvIYlZirpz8GOkPM0lsb~r-HXHXydT8muu7n2cq8-OuEC6QFCETIcsy4ys8zAimFfR8BQSUKAVrV4UKajmHHr-r4GwNgenBH7kw7PomD-6Le0oiSKWd8XSuI1m8V7BG793MNHShbhatJiuwR4UddyvrxNMvovWHR2qZQb8ms27CSxVRILNWtVH4DgKCAjZtT78Rvyi3HkhLqype29VOjNT3Jq~sviJY7Czqt8DveBQ2Mi1U~uQLRhjtKrAC~v3VhKJnqX8Q__",
+    'https://picsum.photos/250?image=1',
+   'https://picsum.photos/250?image=2',
+    'https://picsum.photos/250?image=3',
   ];
 
   @override
@@ -103,10 +107,10 @@ class ProfileScreen extends StatelessWidget {
                             height: 100.h,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) => customImageCard(
+                              itemBuilder: (context, index) => customImageCard(index: index,imageCount:MediaList.length ,
                                   imageUrl:
-                                      MediaList[index],width:110.w ,),
-                              itemCount: MediaList.length,
+                                      MediaList[index],width:110.w ,onImageTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => GaleryViewScreen(imageList: MediaList,),));},),
+                              itemCount: MediaList.length<3?MediaList.length:3,
                             ),
                           ),
                           SizedBox(
@@ -156,7 +160,7 @@ class ProfileScreen extends StatelessWidget {
                                   subtitle: SizedBox(
                                       width: 400.w,
                                       child: const Text(
-                                        "Creating My own sunshine in a worldddddddddddddddddd",
+                                        "Creating My own sunshine in a world",
                                         overflow: TextOverflow.ellipsis,
                                       )),
                                   trailing: Text(
