@@ -4,7 +4,7 @@ import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_button.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/banners_screen.dart';
-import 'package:info_91_proj/feature/information_groups/presentation/pages/info_group_chat_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_scaffold.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/expandable_widget.dart';
