@@ -3,11 +3,9 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
-import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/chat_screen_controller.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -20,7 +18,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final ChatScreenController chatController = Get.put(ChatScreenController());
+  bool _isEmojiVisible = false;
+   bool _isgallery = false;
   FocusNode searchFocusnOde = FocusNode();
   TextEditingController searchController = TextEditingController();
   @override
@@ -29,8 +28,9 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     searchFocusnOde.addListener(() {
       if (searchFocusnOde.hasFocus) {
-       chatController.hideEmojiPicker();
-        chatController.hideGallery();
+        setState(() {
+          _isEmojiVisible = false;
+        });
       }
     });
   }
@@ -42,10 +42,10 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: WillPopScope(
           onWillPop: () {
-             if (chatController.isEmojiVisible.value ||
-                chatController.isGalleryVisible.value) {
-              chatController.hideEmojiPicker();
-              chatController.hideGallery();
+            if (_isEmojiVisible) {
+              setState(() {
+                _isEmojiVisible = false;
+              });
             } else {
               Navigator.pop(context);
             }
@@ -96,11 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child:
                             _buildInputField(searchController, searchFocusnOde),
                       ),
-                 Obx(() => chatController.isEmojiVisible.value
-                          ? bottomSheet(context)
-                          : chatController.isGalleryVisible.value
-                              ? bottomSheet(context)
-                              : Container()),
+                  _isEmojiVisible?_buildEmojiPicker():_isgallery?bottomSheet(context):Container(),
                     ],
                   ),
                 ),
@@ -115,9 +111,9 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildEmojiPicker() {
     return EmojiPicker(
         onEmojiSelected: (category, emoji) {
-        
+          setState(() {
             searchController.text = searchController.text + emoji.emoji;
-       
+          });
         },
         textEditingController: TextEditingController(),
         scrollController: ScrollController(),
@@ -237,8 +233,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 controller: controller,
                 focusNode: focusnode,
                 onTap: () {
-                 chatController.hideEmojiPicker();
-              chatController.hideGallery();
+                  setState(() {
+                    _isEmojiVisible = false;_isgallery=false;
+                  });
                 },
                 decoration: InputDecoration(
                   hintText: 'Type your message here',
@@ -250,26 +247,34 @@ class _ChatScreenState extends State<ChatScreen> {
                   errorBorder: border,
                   enabledBorder: border,
                   focusedBorder: border,
-                  prefixIcon: Obx(() => IconButton(
-                    icon: Icon(chatController.isEmojiVisible.value
-                        ? Icons.keyboard
-                        : Icons.emoji_emotions),
-                    onPressed:(){
-                       chatController.toggleEmojiPicker;
-                       print(chatController.isEmojiVisible);
-                        // if (chatController.isEmojiVisible.isTrue) {
-                        //   searchFocusnOde.unfocus(); // Hide the keyboard
-                        // } else {
-                        //   searchFocusnOde.requestFocus(); // Show the keyboard
-                        // }
+                  prefixIcon: IconButton(
+                    icon: Icon(searchFocusnOde.hasFocus
+                        ? Icons.emoji_emotions
+                        : Icons.keyboard),
+                    onPressed: () {
+                      setState(() {
+                        _isEmojiVisible = !_isEmojiVisible;_isgallery=false;
+                        if (_isEmojiVisible) {
+                          searchFocusnOde.unfocus(); // Hide the keyboard
+                        } else {
+                          searchFocusnOde.requestFocus(); // Show the keyboard
+                        }
+                      });
                     },
-                  )),
-                
-                 
-                    suffixIcon: IconButton(
-                icon: Icon(Icons.attach_file),
-                onPressed: chatController.toggleGallery,
-              ),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.attach_file),
+                    onPressed: () {setState(() {
+                      _isEmojiVisible=false;
+                      _isgallery=true;
+                    });
+                      // showModalBottomSheet(
+                      //   backgroundColor: Colors.transparent,
+                      //   context: context,
+                      //   builder: (context) => bottomSheet(context),
+                      // );
+                    },
+                  ),
                 ),
               ),
             ),
