@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_divider.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
-import 'package:info_91_proj/feature/information_groups/presentation/pages/info_group_chat_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/start_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/chat_list_card.dart';
@@ -98,7 +98,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const StartScreen(),
+                            builder: (context) =>  StartScreen(),
                           ));
                     },
                   ),
