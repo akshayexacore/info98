@@ -73,6 +73,7 @@ class AuthController extends GetxController {
   }
 
   void gotoLoginPage() async {
+    // Get.off(InfoGroupChatListScreen);
     Get.offAllNamed(WelcomePage.routeName);
   }
 
