@@ -123,7 +123,7 @@ class AppTextStyles {
 }
 
 class AppThemes {
-  static final appTheme = ThemeData(
+  static final  appTheme = ThemeData(
     scaffoldBackgroundColor: AppColors.splashBackground,
     fontFamily: AppFonts.primaryFontFamily,
     textTheme: textDefault,
@@ -256,6 +256,7 @@ class AppColors {
   static const backgroundWhite = white;
   static const splashBackground = Color(0xffEEEEEE);
   static const inputLightBorder = shimmerHighlightColor;
+    static const lightChat = Color(0xffD8D6F3);
 }
 
 class AppSpacings {

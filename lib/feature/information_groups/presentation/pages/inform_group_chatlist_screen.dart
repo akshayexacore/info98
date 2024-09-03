@@ -9,6 +9,8 @@ import 'package:info_91_proj/feature/information_groups/presentation/pages/profi
 import 'package:info_91_proj/feature/information_groups/presentation/pages/start_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info_91_proj/feature/profile/controllers/profile_controller.dart';
+import 'package:info_91_proj/feature/profile/profile_page.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -64,8 +66,20 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
               CustomAppBar(
                 appBarName: "Information Groups",
                 isTextield: true,
-                actionWidget: [CustomPopupmenu(onSelected: (val){if(val==1){Navigator.push(context, MaterialPageRoute(builder: (context) => InformGroupCreationScreen(),));}}, itemList: [popupMenuModel(name: "Create group",value: 1)],)
-               
+                actionWidget: [
+                  CustomPopupmenu(
+                    onSelected: (val) {
+                      if (val == 1) {
+                        Get.offAllNamed(ProfilePage.routeName);
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => ProfilePage(),
+                        //     ));
+                      }
+                    },
+                    itemList: [popupMenuModel(name: "Create group", value: 1)],
+                  )
                 ],
               ),
               const SizedBox(

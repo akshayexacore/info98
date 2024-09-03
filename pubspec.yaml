@@ -57,7 +57,13 @@ dependencies:
   google_fonts: ^6.2.1
   image_picker: ^1.1.2
   readmore: ^3.0.0
-  emoji_picker_flutter: ^3.0.0
+  emoji_picker_flutter: 
+  flutter_image_compress: ^2.3.0
+  permission_handler: ^11.3.1
+  contacts_service: ^0.6.3
+  linkify: ^5.0.0
+  flutter_linkify: ^6.0.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

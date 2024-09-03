@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/tiny/app_button.dart';
 import 'package:info_91_proj/feature/auth/controllers.dart/login_contoller.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/inform_group_chatlist_screen.dart';
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({Key? key}) : super(key: key);
@@ -45,7 +46,14 @@ class WelcomePage extends StatelessWidget {
                       ),
                       AppButton(
                           text: "Let’s Start",
-                          onPressed: _loginController.gotoLoginPage),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      InfoGroupChatListScreen(),
+                                ));
+                          }),
                     ],
                   ),
                 ),

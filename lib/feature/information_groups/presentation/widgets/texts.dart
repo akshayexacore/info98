@@ -35,3 +35,5 @@ Widget greynonBoldText(String name, {double? size}) {
     style: TextStyle(fontSize: size ?? 13.sp),
   );
 }
+ TextStyle chatTextstyle= GoogleFonts.poppins(
+                                  fontSize: 15.sp, color: AppColors.text,fontWeight: FontWeight.w400);
