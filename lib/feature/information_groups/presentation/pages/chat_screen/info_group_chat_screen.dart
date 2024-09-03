@@ -257,11 +257,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed:(){
                        chatController.toggleEmojiPicker();
                        print(chatController.isEmojiVisible.value);
-                        // if (chatController.isEmojiVisible.isTrue) {
-                        //   searchFocusnOde.unfocus(); // Hide the keyboard
-                        // } else {
-                        //   searchFocusnOde.requestFocus(); // Show the keyboard
-                        // }
+                        if (chatController.isEmojiVisible.isTrue) {
+                          searchFocusnOde.unfocus(); // Hide the keyboard
+                        } else {
+                          searchFocusnOde.requestFocus(); // Show the keyboard
+                        }
                     },
                   )),
                 
