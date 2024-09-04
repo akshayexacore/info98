@@ -28,6 +28,7 @@ class AuthController extends GetxController {
       } else {
         gotoLoginPage();
       }
+      
       busy(false);
     } catch (_) {
       print('error: landing: ${_.toString()}');

@@ -112,6 +112,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   Widget buildShowDate() {
+    print("fghjjghj$msgdate");
     return AnimatedBuilder(
         animation: _animation!,
         builder: (context, child) {
@@ -177,6 +178,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     children: [
                       Positioned(
                         left: MediaQuery.of(context).size.width / 2,
+                        top: 30,
                         child: Center(
                           child: SlideTransition(
                             position: _animation!,

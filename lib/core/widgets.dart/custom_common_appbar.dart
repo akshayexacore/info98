@@ -11,6 +11,7 @@ class CustomAppBar extends StatelessWidget {
   final bool isPic;
   final Function? imageOntap;
   final String? imageUrl;
+  final TextEditingController? textEditingController;
 
   final Function? onChangeFunction;
   final List<Widget>? actionWidget;
@@ -22,7 +23,7 @@ class CustomAppBar extends StatelessWidget {
     this.isTextield = false,
     super.key,
     this.imageUrl,
-    this.imageOntap,
+    this.imageOntap, this.textEditingController,
   });
 
   @override
@@ -98,7 +99,7 @@ class CustomAppBar extends StatelessWidget {
             ],
           ),
           if (isTextield)
-            CustomAppBatTexField(onChangeFunction: onChangeFunction)
+            CustomAppBatTexField(onChangeFunction: onChangeFunction,cntroler: textEditingController??TextEditingController(),)
         ],
       ),
     );

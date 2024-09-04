@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 
 class ChatListItem extends StatelessWidget {
   final Chat chat;
@@ -65,4 +69,38 @@ class Chat {
     this.itemcount,
     required this.avatarUrl,
   });
+}
+
+class ContactListCard extends StatelessWidget {
+  final Uint8List avatar;
+  final String contactName;
+  final bool value;
+  final VoidCallback onCange;
+  const ContactListCard(
+      {required this.value,
+      required this.onCange,
+      required this.avatar,
+      required this.contactName});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        leading: CircleAvatar(
+          backgroundImage: MemoryImage(avatar),
+          radius: 25.0,
+        ),
+        title: Text(
+          contactName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        trailing:
+         CustomCircleIconWidget(
+            onCange: onCange,
+           
+              backgroundClr: value ? AppColors.secondary : Color(0xffD9D9D9),
+              radius: 12.5,
+              iconColor: value ? AppColors.white : Colors.transparent, 
+           ),
+        onTap: onCange);
+  }
 }

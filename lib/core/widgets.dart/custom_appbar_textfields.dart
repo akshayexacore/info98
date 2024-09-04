@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBatTexField extends StatelessWidget {
+  final TextEditingController cntroler;
   const CustomAppBatTexField({
     super.key,
-    required this.onChangeFunction,
+    required this.onChangeFunction, required this.cntroler,
   });
 
   final Function? onChangeFunction;
@@ -16,6 +17,7 @@ class CustomAppBatTexField extends StatelessWidget {
             color: Colors.white.withOpacity(.1),
             borderRadius: BorderRadius.circular(12)),
         child: TextFormField(
+          controller: cntroler,
           style: TextStyle(color: Colors.white),
           onChanged: (String va) {
             if (onChangeFunction != null) {
