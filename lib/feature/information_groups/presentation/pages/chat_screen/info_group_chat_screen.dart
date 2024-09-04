@@ -18,6 +18,7 @@ import 'package:info_91_proj/feature/information_groups/presentation/pages/profi
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,30 +29,39 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final ChatScreenController chatController = Get.put(ChatScreenController());
   FocusNode searchFocusnOde = FocusNode();
   FilePickerHelper filePickerHelper = FilePickerHelper();
+  final ScrollController _scrollController = ScrollController();
+  Animation<Offset>? _animation;
+  AnimationController? _animationController1;
+  Tween<Offset>? _animationTween;
+  String msgdate = '';
   List<ChatMessage> messages = [
     ChatMessage(
-        message: "Good Morning, Have a Good Day!", senderId: "2", isRead: true),
-    ChatMessage(message: "Good Morning !", senderId: "1", isRead: false),
+        message: "Good Morning, Have a Good Day!",
+        senderId: "2",
+        isRead: true,
+        dateTime: DateTime.now()),
+    ChatMessage(
+        message: "Good Morning !",
+        senderId: "1",
+        isRead: false,
+        dateTime: DateTime.now()),
     ChatMessage(
         message: "https://pub.dev/packages/linkify!",
         senderId: "2",
-        isRead: true),
+        isRead: true,
+        dateTime: DateTime.now()),
     ChatMessage(
         message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
         senderId: "1",
-        isRead: false)
+        isRead: false,
+        dateTime: DateTime.now())
   ];
 
   TextEditingController searchController = TextEditingController();
-  FilePickerResult? result;
-  PlatformFile? file;
-  late File _imageFile;
-  final ImagePicker picker = ImagePicker();
-  XFile? image;
   @override
   void initState() {
     // TODO: implement initState
@@ -62,6 +72,71 @@ class _ChatScreenState extends State<ChatScreen> {
         chatController.hideGallery();
       }
     });
+    _animationController1 = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1000));
+    _animationTween = Tween<Offset>(
+      begin: Offset(2, -1),
+      end: Offset(2, .2),
+    );
+    _animation = _animationTween!.animate(
+      CurvedAnimation(
+        parent: _animationController1!,
+        curve: Curves.ease,
+      ),
+    );
+  }
+
+  String formatMessageTimestamp(DateTime timestamp, int index) {
+    DateTime now = DateTime.now();
+    DateTime yesterday = DateTime.now().subtract(Duration(days: 1));
+    DateTime lastWeek =
+        DateTime.now().subtract(Duration(days: DateTime.now().weekday + 6));
+    // if (!checkUniqueness==true) {
+    //   // If checkUniqueness is false, return null without checking the uniqueness of the date.
+    //   return "";
+    // }
+    print("date $now");
+    if (timestamp.year == now.year &&
+        timestamp.month == now.month &&
+        timestamp.day == now.day) {
+      return ' Today ';
+    } else if (timestamp.year == yesterday.year &&
+        timestamp.month == yesterday.month &&
+        timestamp.day == yesterday.day) {
+      return 'Yesterday ';
+    } else if (timestamp.isAfter(lastWeek)) {
+      return DateFormat('EEEE').format(timestamp);
+    } else {
+      return DateFormat('d MMM yyyy').format(timestamp);
+    }
+  }
+
+  Widget buildShowDate() {
+    return AnimatedBuilder(
+        animation: _animation!,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: _animation!.value,
+            child: child,
+          );
+        },
+        child: Container(
+            padding: EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+            constraints: BoxConstraints(maxWidth: 110, maxHeight: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: msgdate != ""
+                  ? Color.fromARGB(209, 199, 219, 235)
+                  : Colors
+                      .transparent, // Consider adjusting the color as needed
+            ),
+            child: Center(
+              child: Container(
+                  child: Text(
+                msgdate,
+                textAlign: TextAlign.center,
+              )),
+            )));
   }
 
   @override
@@ -94,61 +169,88 @@ class _ChatScreenState extends State<ChatScreen> {
                       ));
                 },
                 appBarName: "Information Groups",
-               
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final message = messages[index];
-                    bool isMe = message.senderId == "1";
-
-                    return Align(
-                      alignment:
-                          isMe ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Container(
-                        constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width - 300,
-                          maxWidth: MediaQuery.of(context).size.width - 90,
-                        ),
-                        padding: EdgeInsets.all(8 ),
-                        margin:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: isMe ? AppColors.lightChat : AppColors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Linkify(
-                              linkStyle:
-                                  GoogleFonts.poppins(decorationColor: Colors.blue),
-                              onOpen: (link) async {
-                                if (!await launchUrl(Uri.parse(link.url))) {
-                                  throw Exception(
-                                      'Could not launch ${link.url}');
-                                }
-                              },
-                              text: message.message ?? "",
-                              textAlign: TextAlign.left,
-                              style: chatTextstyle,
-                            ),
-                            if (!isMe && message.isRead) ...[
-                              SizedBox(height: 5),
-                              Text(
-                                'Read',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ],
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: MediaQuery.of(context).size.width / 2,
+                        child: Center(
+                          child: SlideTransition(
+                            position: _animation!,
+                            child: buildShowDate(),
+                          ),
                         ),
                       ),
-                    );
-                  },
+                      ListView.builder(
+                        controller: _scrollController,
+                        itemCount: messages.length,
+                        reverse: true,
+                        physics: AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final message = messages[index];
+                          bool isMe = message.senderId == "1";
+                          msgdate =
+                              formatMessageTimestamp(message.dateTime, index);
+
+                          return Align(
+                            alignment: isMe
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: Container(
+                              constraints: BoxConstraints(
+                                minWidth:
+                                    MediaQuery.of(context).size.width - 300,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 90,
+                              ),
+                              padding: EdgeInsets.all(8),
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: isMe
+                                    ? AppColors.lightChat
+                                    : AppColors.white,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Linkify(
+                                    linkStyle: GoogleFonts.poppins(
+                                        decorationColor: Colors.blue),
+                                    onOpen: (link) async {
+                                      if (!await launchUrl(
+                                          Uri.parse(link.url))) {
+                                        throw Exception(
+                                            'Could not launch ${link.url}');
+                                      }
+                                    },
+                                    text: message.message ?? "",
+                                    textAlign: TextAlign.left,
+                                    style: chatTextstyle,
+                                  ),
+                                  if (!isMe && message.isRead) ...[
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'Read',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -159,10 +261,22 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      child:
-                          _buildInputField(searchController, searchFocusnOde,(){messages.add(ChatMessage(message: searchController.text, senderId: "1"));searchController.clear();setState(() {
-                            
-                          });}),
+                      child: _buildInputField(searchController, searchFocusnOde,
+                          () {
+                        messages.insert(
+                            0,
+                            ChatMessage(
+                                message: searchController.text,
+                                senderId: "1",
+                                dateTime: DateTime.now()));
+                        searchController.clear();
+                        _scrollController.animateTo(
+                          0.0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                        setState(() {});
+                      }),
                     ),
                     Obx(() => chatController.isEmojiVisible.value
                         ? _buildEmojiPicker()
@@ -327,7 +441,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildInputField(
-      TextEditingController controller, FocusNode focusnode,Function onSend) {
+      TextEditingController controller, FocusNode focusnode, Function onSend) {
     var border = OutlineInputBorder(
       borderSide: BorderSide(color: Colors.transparent),
       borderRadius: BorderRadius.circular(20),
@@ -345,8 +459,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 onTap: () {
                   chatController.hideEmojiPicker();
                   chatController.hideGallery();
-                },onChanged: (val){
-                    chatController.checkTextFieldEmpty(val);
+                },
+                onChanged: (val) {
+                  chatController.checkTextFieldEmpty(val);
                 },
                 decoration: InputDecoration(
                   hintText: 'Type your message here',
@@ -379,11 +494,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
-           Obx(() => IconButton(
-              icon:chatController.isTextFieldEmpty.value
-              ?Icon(Icons.camera): Icon(Icons.send),
-              onPressed: () {chatController.isTextFieldEmpty.value? filePickerHelper.pickFiles("image", context,""):onSend();},
-            )),
+            Obx(() => IconButton(
+                  icon: chatController.isTextFieldEmpty.value
+                      ? Icon(Icons.camera)
+                      : Icon(Icons.send),
+                  onPressed: () {
+                    chatController.isTextFieldEmpty.value
+                        ? filePickerHelper.pickFiles("image", context, "")
+                        : onSend();
+                  },
+                )),
           ],
         ),
       ),
@@ -395,8 +515,10 @@ class ChatMessage {
   final String message;
   final String senderId;
   final bool isRead;
+  final DateTime dateTime;
 
   ChatMessage({
+    required this.dateTime,
     required this.message,
     required this.senderId,
     this.isRead = false,
@@ -405,9 +527,6 @@ class ChatMessage {
   // Method to mark the message as read
   ChatMessage markAsRead() {
     return ChatMessage(
-      message: message,
-      senderId: senderId,
-      isRead: true,
-    );
+        message: message, senderId: senderId, isRead: true, dateTime: dateTime);
   }
 }
