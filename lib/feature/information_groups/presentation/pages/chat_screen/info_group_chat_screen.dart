@@ -188,9 +188,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 appBarName: "Information Groups",
               ),
               Expanded(
-                child: Align(
+                child: 
+                // Container(color: Colors.red,)
+                Align(
                   alignment: Alignment.topCenter,
-                  child: ListView.builder(
+                  child:
+                   ListView.builder(
                     controller: _scrollController,
                     itemCount: messages.length,
                     reverse: true,
@@ -207,47 +210,48 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         alignment: isMe
                             ? Alignment.centerRight
                             : Alignment.centerLeft,
-                        child: BuildMessageWidget(messageModel: message,)
+                        child:  
+                        BuildMessageWidget(messageModel: message,)
                       );
                     },
                   ),
                 ),
               ),
-              // Container(
-              //   padding: EdgeInsets.all(5),
-              //   width: MediaQuery.of(context).size.width,
-              //   decoration: BoxDecoration(color: AppColors.white),
-              //   child: Column(
-              //     children: [
-              //       Container(
-              //         width: MediaQuery.of(context).size.width,
-              //         child: _buildInputField(searchController, searchFocusnOde,
-              //             () {
-              //           messages.insert(
-              //               0,
-              //               ChatMessage(messageType: MessageType.text,
-              //                   message: searchController.text,
-              //                   senderId: "1",
-              //                   time: getCurrentTime(),
-              //                   status: MessageStatus.sent,
-              //                   dateTime: DateTime.now()));
-              //           searchController.clear();
-              //           _scrollController.animateTo(
-              //             0.0,
-              //             duration: Duration(milliseconds: 300),
-              //             curve: Curves.easeOut,
-              //           );
-              //           setState(() {});
-              //         }),
-              //       ),
-              //       Obx(() => chatController.isEmojiVisible.value
-              //           ? _buildEmojiPicker()
-              //           : chatController.isGalleryVisible.value
-              //               ? bottomSheet(context)
-              //               : Container()),
-              //     ],
-              //   ),
-              // ),
+              Container(
+                padding: EdgeInsets.all(5),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(color: AppColors.white),
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: _buildInputField(searchController, searchFocusnOde,
+                          () {
+                        messages.insert(
+                            0,
+                            ChatMessage(messageType: MessageType.text,
+                                message: searchController.text,
+                                senderId: "1",
+                                time: getCurrentTime(),
+                                status: MessageStatus.sent,
+                                dateTime: DateTime.now()));
+                        searchController.clear();
+                        _scrollController.animateTo(
+                          0.0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                        setState(() {});
+                      }),
+                    ),
+                    Obx(() => chatController.isEmojiVisible.value
+                        ? _buildEmojiPicker()
+                        : chatController.isGalleryVisible.value
+                            ? bottomSheet(context)
+                            : Container()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -389,68 +393,65 @@ String getCurrentTime() {
       borderSide: BorderSide(color: Colors.transparent),
       borderRadius: BorderRadius.circular(15),
     );
-    return Expanded(
-      // padding: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: SizedBox(height: 45.h,
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusnode,
-                  onTap: () {
-                    chatController.hideEmojiPicker();
-                    chatController.hideGallery();
-                  },
-                  onChanged: (val) {
-                    chatController.checkTextFieldEmpty(val);
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Type your message here',
-                    hintStyle: GoogleFonts.poppins(
-                        fontSize: 12.5.sp, color: AppColors.text.withOpacity(.75)),
-                    filled: true,
-                    fillColor: AppColors.google,
-                    border: border,
-                    errorBorder: border,
-                    enabledBorder: border,
-                    focusedBorder: border,
-                    prefixIcon: Obx(() => IconButton(
-                          icon: Icon(chatController.isEmojiVisible.value
-                              ? Icons.keyboard
-                              : Icons.emoji_emotions),
-                          onPressed: () {
-                            chatController.toggleEmojiPicker();
-                            print(chatController.isEmojiVisible.value);
-                            if (chatController.isEmojiVisible.isTrue) {
-                              searchFocusnOde.unfocus(); // Hide the keyboard
-                            } else {
-                              searchFocusnOde.requestFocus(); // Show the keyboard
-                            }
-                          },
-                        )),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.attach_file),
-                      onPressed: chatController.toggleGallery,
-                    ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: SizedBox(height: 45.h,
+              child: TextField(
+                controller: controller,
+                focusNode: focusnode,
+                onTap: () {
+                  chatController.hideEmojiPicker();
+                  chatController.hideGallery();
+                },
+                onChanged: (val) {
+                  chatController.checkTextFieldEmpty(val);
+                },
+                decoration: InputDecoration(
+                  hintText: 'Type your message here',
+                  hintStyle: GoogleFonts.poppins(
+                      fontSize: 12.5.sp, color: AppColors.text.withOpacity(.75)),
+                  filled: true,
+                  fillColor: AppColors.google,
+                  border: border,
+                  errorBorder: border,
+                  enabledBorder: border,
+                  focusedBorder: border,
+                  prefixIcon: Obx(() => IconButton(
+                        icon: Icon(chatController.isEmojiVisible.value
+                            ? Icons.keyboard
+                            : Icons.emoji_emotions),
+                        onPressed: () {
+                          chatController.toggleEmojiPicker();
+                          print(chatController.isEmojiVisible.value);
+                          if (chatController.isEmojiVisible.isTrue) {
+                            searchFocusnOde.unfocus(); // Hide the keyboard
+                          } else {
+                            searchFocusnOde.requestFocus(); // Show the keyboard
+                          }
+                        },
+                      )),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.attach_file),
+                    onPressed: chatController.toggleGallery,
                   ),
                 ),
               ),
             ),
-            Obx(() => IconButton(
-                  icon: chatController.isTextFieldEmpty.value
-                      ? Icon(Icons.camera)
-                      : Icon(Icons.send),
-                  onPressed: () {
-                    chatController.isTextFieldEmpty.value
-                        ? filePickerHelper.pickFiles("image", context, "")
-                        : onSend();
-                  },
-                )),
-          ],
-        ),
+          ),
+          Obx(() => IconButton(
+                icon: chatController.isTextFieldEmpty.value
+                    ? Icon(Icons.camera)
+                    : Icon(Icons.send),
+                onPressed: () {
+                  chatController.isTextFieldEmpty.value
+                      ? filePickerHelper.pickFiles("image", context, "")
+                      : onSend();
+                },
+              )),
+        ],
       ),
     );
   }

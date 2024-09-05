@@ -55,7 +55,8 @@ class BuildMessageWidget extends StatelessWidget {
     return commonBuildMessageOuter(
       context: context,
       isMe: isMe,
-      child: Column(
+      child:
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Linkify(
@@ -71,23 +72,21 @@ class BuildMessageWidget extends StatelessWidget {
           ),
           Align(
             alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-            child: Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    message.time,
-                    style: GoogleFonts.poppins(
-                        color: Color(0xff666666),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 11.sp),
-                  ),
-                  SizedBox(
-                    width: 1.w,
-                  ),
-                  if (isMe) _buildMessageStatus(message.status),
-                ],
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message.time,
+                  style: GoogleFonts.poppins(
+                      color: Color(0xff666666),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11.sp),
+                ),
+                SizedBox(
+                  width: 1.w,
+                ),
+                if (isMe) _buildMessageStatus(message.status),
+              ],
             ),
           ),
         ],
@@ -103,7 +102,8 @@ class BuildMessageWidget extends StatelessWidget {
     return commonBuildMessageOuter(
         context: context,
         isMe: isMe,
-        child: Column(
+        child: 
+        Column(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
@@ -123,27 +123,27 @@ class BuildMessageWidget extends StatelessWidget {
             ),
             Align(
               alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-              child: Expanded(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      message.time,
-                      style: GoogleFonts.poppins(
-                          color: Color(0xff666666),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11.sp),
-                    ),
-                    SizedBox(
-                      width: 1.w,
-                    ),
-                    if (isMe) _buildMessageStatus(message.status),
-                  ],
+              child:
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message.time,
+                  style: GoogleFonts.poppins(
+                      color: Color(0xff666666),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11.sp),
                 ),
-              ),
+                SizedBox(
+                  width: 1.w,
+                ),
+                if (isMe) _buildMessageStatus(message.status),
+              ],
+            ),
             ),
           ],
-        ));
+        )
+        );
   }
 
   Widget _buildDocumentMessage(ChatMessage message) {
