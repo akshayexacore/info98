@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
+import 'package:info_91_proj/core/image_view.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 
 class ChatListItem extends StatelessWidget {
@@ -84,11 +85,10 @@ class ContactListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("cccccccccccccc$avatar");
     return ListTile(
-        leading: CircleAvatar(
-          backgroundImage: MemoryImage(avatar),
-          radius: 25.0,
-        ),
+        leading:AppCustomCirleProfileIamge(isStringImag: false,memoryImage: avatar,radius: 25.r,),
+   
         title: Text(
           contactName,
           style: const TextStyle(fontWeight: FontWeight.bold),

@@ -11,8 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/file_picker_helper.dart';
+import 'package:info_91_proj/core/variables.dart';
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
-import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/chat_screen_controller.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/blocs/chat_screen_controller.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/contact_list.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -42,22 +44,35 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     ChatMessage(
         message: "Good Morning, Have a Good Day!",
         senderId: "2",
+        time:"1:00 PM",
+        status: MessageStatus.read,
+        messageType: MessageType.image,
         isRead: true,
         dateTime: DateTime.now()),
     ChatMessage(
         message: "Good Morning !",
         senderId: "1",
+        time:"1:00 PM",
         isRead: false,
+
+         status: MessageStatus.read,
+        messageType: MessageType.text,
         dateTime: DateTime.now()),
     ChatMessage(
         message: "https://pub.dev/packages/linkify!",
         senderId: "2",
         isRead: true,
+         status: MessageStatus.delivered,
+         time:"1:00 PM",
+        messageType: MessageType.text,
         dateTime: DateTime.now()),
     ChatMessage(
         message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
         senderId: "1",
+        messageType: MessageType.text,
+        time:"1:00 PM",
         isRead: false,
+         status: MessageStatus.delivered,
         dateTime: DateTime.now())
   ];
 
@@ -66,6 +81,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // this for to get contact litinitial,to avoid lag
     searchFocusnOde.addListener(() {
       if (searchFocusnOde.hasFocus) {
         chatController.hideEmojiPicker();
@@ -174,120 +190,64 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               Expanded(
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: MediaQuery.of(context).size.width / 2,
-                        top: 30,
-                        child: Center(
-                          child: SlideTransition(
-                            position: _animation!,
-                            child: buildShowDate(),
-                          ),
-                        ),
-                      ),
-                      ListView.builder(
-                        controller: _scrollController,
-                        itemCount: messages.length,
-                        reverse: true,
-                        physics: AlwaysScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final message = messages[index];
-                          bool isMe = message.senderId == "1";
-                          msgdate =
-                              formatMessageTimestamp(message.dateTime, index);
-
-                          return Align(
-                            alignment: isMe
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: Container(
-                              constraints: BoxConstraints(
-                                minWidth:
-                                    MediaQuery.of(context).size.width - 300,
-                                maxWidth:
-                                    MediaQuery.of(context).size.width - 90,
-                              ),
-                              padding: EdgeInsets.all(8),
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              decoration: BoxDecoration(
-                                color: isMe
-                                    ? AppColors.lightChat
-                                    : AppColors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Linkify(
-                                    linkStyle: GoogleFonts.poppins(
-                                        decorationColor: Colors.blue),
-                                    onOpen: (link) async {
-                                      if (!await launchUrl(
-                                          Uri.parse(link.url))) {
-                                        throw Exception(
-                                            'Could not launch ${link.url}');
-                                      }
-                                    },
-                                    text: message.message ?? "",
-                                    textAlign: TextAlign.left,
-                                    style: chatTextstyle,
-                                  ),
-                                  if (!isMe && message.isRead) ...[
-                                    SizedBox(height: 5),
-                                    Text(
-                                      'Read',
-                                      style: TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    reverse: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final message = messages[index];
+                      bool isMe = message.senderId == "1";
+                      msgdate =
+                          formatMessageTimestamp(message.dateTime, index);
+                  
+                      return 
+                      Align(
+                        alignment: isMe
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: BuildMessageWidget(messageModel: message,)
+                      );
+                    },
                   ),
                 ),
               ),
-              Container(
-                // padding: EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(color: AppColors.white),
-                child: Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: _buildInputField(searchController, searchFocusnOde,
-                          () {
-                        messages.insert(
-                            0,
-                            ChatMessage(
-                                message: searchController.text,
-                                senderId: "1",
-                                dateTime: DateTime.now()));
-                        searchController.clear();
-                        _scrollController.animateTo(
-                          0.0,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                        setState(() {});
-                      }),
-                    ),
-                    Obx(() => chatController.isEmojiVisible.value
-                        ? _buildEmojiPicker()
-                        : chatController.isGalleryVisible.value
-                            ? bottomSheet(context)
-                            : Container()),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.all(5),
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(color: AppColors.white),
+              //   child: Column(
+              //     children: [
+              //       Container(
+              //         width: MediaQuery.of(context).size.width,
+              //         child: _buildInputField(searchController, searchFocusnOde,
+              //             () {
+              //           messages.insert(
+              //               0,
+              //               ChatMessage(messageType: MessageType.text,
+              //                   message: searchController.text,
+              //                   senderId: "1",
+              //                   time: getCurrentTime(),
+              //                   status: MessageStatus.sent,
+              //                   dateTime: DateTime.now()));
+              //           searchController.clear();
+              //           _scrollController.animateTo(
+              //             0.0,
+              //             duration: Duration(milliseconds: 300),
+              //             curve: Curves.easeOut,
+              //           );
+              //           setState(() {});
+              //         }),
+              //       ),
+              //       Obx(() => chatController.isEmojiVisible.value
+              //           ? _buildEmojiPicker()
+              //           : chatController.isGalleryVisible.value
+              //               ? bottomSheet(context)
+              //               : Container()),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -296,37 +256,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   List<Contact> contacts = [];
-  Future<void> _requestContactPermission() async {
-    if (await Permission.contacts.request().isGranted) {
-      print('Contact permission get');
-      fetchContacts();
-    } else {
-      // Handle permission denied
-      print('Contact permission denied');
-    }
-  }
-
-  Future<void> fetchContacts() async {
-    print('Contact permission get');
-    try {
-      final Iterable<Contact> contacts = await ContactsService.getContacts();
-      print('Contact permission ge2t${contacts.length}');
-
-      this.contacts = contacts.toList();
-      if (contacts.isNotEmpty) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ContactList(
-                contacts: this.contacts,
-              ),
-            ));
-      }
-    } catch (e) {
-      print('Error fetching contacts: $e');
-    }
-  }
-
+String getCurrentTime() {
+  final now = DateTime.now();
+  final formatter = DateFormat.jm(); // This formats the time as '1:00 PM' or '2:30 AM'
+  return formatter.format(now);
+}
   Widget _buildEmojiPicker() {
     return EmojiPicker(
         onEmojiSelected: (category, emoji) {
@@ -399,7 +333,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               ),
               InkWell(
                 onTap: () {
-                  _requestContactPermission();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactList(
+                          contacts: Variables.userContact,
+                        ),
+                      ));
+
                   // pickFiles("Video", context, "");
                 },
                 child: iconCreation(
@@ -446,7 +387,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       TextEditingController controller, FocusNode focusnode, Function onSend) {
     var border = OutlineInputBorder(
       borderSide: BorderSide(color: Colors.transparent),
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(15),
     );
     return Expanded(
       // padding: const EdgeInsets.all(8.0),
@@ -455,43 +396,45 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: TextField(
-                controller: controller,
-                focusNode: focusnode,
-                onTap: () {
-                  chatController.hideEmojiPicker();
-                  chatController.hideGallery();
-                },
-                onChanged: (val) {
-                  chatController.checkTextFieldEmpty(val);
-                },
-                decoration: InputDecoration(
-                  hintText: 'Type your message here',
-                  hintStyle: GoogleFonts.poppins(
-                      fontSize: 13.sp, color: AppColors.text.withOpacity(.75)),
-                  filled: true,
-                  fillColor: AppColors.google,
-                  border: border,
-                  errorBorder: border,
-                  enabledBorder: border,
-                  focusedBorder: border,
-                  prefixIcon: Obx(() => IconButton(
-                        icon: Icon(chatController.isEmojiVisible.value
-                            ? Icons.keyboard
-                            : Icons.emoji_emotions),
-                        onPressed: () {
-                          chatController.toggleEmojiPicker();
-                          print(chatController.isEmojiVisible.value);
-                          if (chatController.isEmojiVisible.isTrue) {
-                            searchFocusnOde.unfocus(); // Hide the keyboard
-                          } else {
-                            searchFocusnOde.requestFocus(); // Show the keyboard
-                          }
-                        },
-                      )),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.attach_file),
-                    onPressed: chatController.toggleGallery,
+              child: SizedBox(height: 45.h,
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusnode,
+                  onTap: () {
+                    chatController.hideEmojiPicker();
+                    chatController.hideGallery();
+                  },
+                  onChanged: (val) {
+                    chatController.checkTextFieldEmpty(val);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Type your message here',
+                    hintStyle: GoogleFonts.poppins(
+                        fontSize: 12.5.sp, color: AppColors.text.withOpacity(.75)),
+                    filled: true,
+                    fillColor: AppColors.google,
+                    border: border,
+                    errorBorder: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
+                    prefixIcon: Obx(() => IconButton(
+                          icon: Icon(chatController.isEmojiVisible.value
+                              ? Icons.keyboard
+                              : Icons.emoji_emotions),
+                          onPressed: () {
+                            chatController.toggleEmojiPicker();
+                            print(chatController.isEmojiVisible.value);
+                            if (chatController.isEmojiVisible.isTrue) {
+                              searchFocusnOde.unfocus(); // Hide the keyboard
+                            } else {
+                              searchFocusnOde.requestFocus(); // Show the keyboard
+                            }
+                          },
+                        )),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.attach_file),
+                      onPressed: chatController.toggleGallery,
+                    ),
                   ),
                 ),
               ),
@@ -513,22 +456,37 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 }
 
+enum MessageType { text, image, document, audio, video, reply }
+enum MessageStatus {
+  sent,
+  delivered,
+  read,
+}
+
 class ChatMessage {
   final String message;
   final String senderId;
   final bool isRead;
+  final String time;
   final DateTime dateTime;
+  final MessageType messageType;
+   MessageStatus status;
+  final String? filePath;
 
   ChatMessage({
     required this.dateTime,
+    required this.messageType,
+    this.filePath,
+    required this.time,
     required this.message,
     required this.senderId,
+    required this.status,
     this.isRead = false,
   });
 
   // Method to mark the message as read
   ChatMessage markAsRead() {
     return ChatMessage(
-        message: message, senderId: senderId, isRead: true, dateTime: dateTime);
+        message: message, senderId: senderId, isRead: true, dateTime: dateTime, messageType: messageType, status: status, time: time);
   }
 }
