@@ -77,11 +77,12 @@ class ContactListCard extends StatelessWidget {
   final String contactName;
   final bool value;
   final VoidCallback onCange;
+  final Widget? leadingWidget;
   const ContactListCard(
       {required this.value,
       required this.onCange,
       required this.avatar,
-      required this.contactName});
+      required this.contactName, this.leadingWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,7 @@ class ContactListCard extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         trailing:
-         CustomCircleIconWidget(
+       leadingWidget??  CustomCircleIconWidget(
             onCange: onCange,
            
               backgroundClr: value ? AppColors.secondary : Color(0xffD9D9D9),
