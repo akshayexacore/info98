@@ -8,6 +8,7 @@ import 'package:info_91_proj/core/tiny/app_button.dart';
 import 'package:info_91_proj/core/tiny/app_divider.dart';
 
 import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/contactSelected_view_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 
@@ -69,7 +70,8 @@ class _ContactListState extends State<ContactList> {
                     onChangeFunction: (va){
                    _filterContactsFunc();
                     },
-                    actionWidget: [customTextButton("Send", onTap: () {})],
+                    actionWidget: [
+                if(_selectedContacts.isNotEmpty)      customTextButton("Send", onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SelectedContactListView(contactList: _selectedContacts),));})],
                   ),
                   Expanded(
                     child: ListView.separated(
