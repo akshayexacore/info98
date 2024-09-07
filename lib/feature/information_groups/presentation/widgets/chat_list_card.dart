@@ -79,29 +79,32 @@ class ContactListCard extends StatelessWidget {
   final VoidCallback onCange;
   final Widget? leadingWidget;
   const ContactListCard(
-      {required this.value,
+      {this.value = false,
       required this.onCange,
       required this.avatar,
-      required this.contactName, this.leadingWidget});
+      required this.contactName,
+      this.leadingWidget});
 
   @override
   Widget build(BuildContext context) {
     print("cccccccccccccc$avatar");
     return ListTile(
-        leading:AppCustomCirleProfileIamge(isStringImag: false,memoryImage: avatar,radius: 25.r,),
-   
+        leading: AppCustomCirleProfileIamge(
+          isStringImag: false,
+          memoryImage: avatar,
+          radius: 25.r,
+        ),
         title: Text(
           contactName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        trailing:
-       leadingWidget??  CustomCircleIconWidget(
-            onCange: onCange,
-           
+        trailing: leadingWidget ??
+            CustomCircleIconWidget(
+              onCange: onCange,
               backgroundClr: value ? AppColors.secondary : Color(0xffD9D9D9),
               radius: 12.5,
-              iconColor: value ? AppColors.white : Colors.transparent, 
-           ),
+              iconColor: value ? AppColors.white : Colors.transparent,
+            ),
         onTap: onCange);
   }
 }

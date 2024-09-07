@@ -18,7 +18,7 @@ class SplashController extends GetxController {
 
   void gotoHomePage() async {
     String token = await _authRepository.getAccessToken();
-    if(token.isNotEmpty){
+    if (token.isNotEmpty) {
       _requestContactPermission();
     }
     isBusy(true);
@@ -26,22 +26,23 @@ class SplashController extends GetxController {
       Get.find<AuthController>().gotoLandingPage();
     });
     isBusy(false);
-  }   Future<void> _requestContactPermission() async {
+  }
+
+  Future<void> _requestContactPermission() async {
     if (await Permission.contacts.request().isGranted) {
       print('Contact permission get');
       fetchContacts();
     } else {
-     
       print('Contact permission denied');
     }
   }
+
   Future<void> fetchContacts() async {
-    
     try {
       final Iterable<Contact> contacts = await ContactsService.getContacts();
-      print('Contact permission ge2t${contacts.length}');
+      print('Contact permission ge2t${contacts}');
 
-      Variables.userContact= contacts.toList();
+      Variables.userContact = contacts.toList();
     } catch (e) {
       print('Error fetching contacts: $e');
     }
