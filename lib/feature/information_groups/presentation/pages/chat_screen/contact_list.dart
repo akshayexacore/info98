@@ -1,5 +1,3 @@
-
-
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +12,9 @@ import 'package:info_91_proj/feature/information_groups/presentation/widgets/cus
 
 class ContactList extends StatefulWidget {
   final List<Contact> contacts;
-  ContactList({super.key, required this.contacts});
+  final Function onSubmitFunction;
+  ContactList(
+      {super.key, required this.contacts, required this.onSubmitFunction});
 
   @override
   State<ContactList> createState() => _ContactListState();
@@ -23,7 +23,7 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   List<Contact> _selectedContacts = [];
   List<Contact> _filterContacts = [];
-  TextEditingController controller= TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   void _toggleContactSelection(Contact contact) {
     setState(() {
@@ -34,19 +34,22 @@ class _ContactListState extends State<ContactList> {
       }
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _filterContacts=widget.contacts;
+    _filterContacts = widget.contacts;
   }
- void _filterContactsFunc() {
+
+  void _filterContactsFunc() {
     String query = controller.text.toLowerCase();
     setState(() {
       _filterContacts = widget.contacts.where((contact) {
         final String? contactName = contact.displayName?.toLowerCase();
         final String contactNumber = contact.phones!.isNotEmpty
-            ? contact.phones!.first.value!.replaceAll(RegExp(r'\D'), '') // remove non-digits
+            ? contact.phones!.first.value!
+                .replaceAll(RegExp(r'\D'), '') // remove non-digits
             : '';
 
         return (contactName != null && contactName.contains(query)) ||
@@ -66,12 +69,19 @@ class _ContactListState extends State<ContactList> {
                   CustomAppBar(
                     appBarName: "Contacts to send",
                     isTextield: true,
-                    textEditingController:controller,
-                    onChangeFunction: (va){
-                   _filterContactsFunc();
+                    textEditingController: controller,
+                    onChangeFunction: (va) {
+                      _filterContactsFunc();
                     },
                     actionWidget: [
-                if(_selectedContacts.isNotEmpty)      customTextButton("Send", onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SelectedContactListView(contactList: _selectedContacts),));})],
+                      if (_selectedContacts.isNotEmpty)
+                        customTextButton("Send", onTap: () {
+                          
+                       widget.  onSubmitFunction(_selectedContacts);
+                        Navigator.pop(context);
+                      
+                        })
+                    ],
                   ),
                   Expanded(
                     child: ListView.separated(
@@ -84,13 +94,11 @@ class _ContactListState extends State<ContactList> {
                           value: _selectedContacts.contains(contact),
                           onCange: () {
                             _toggleContactSelection(contact);
-                            if(controller.text.isNotEmpty){
+                            if (controller.text.isNotEmpty) {
                               controller.clear();
                               _filterContactsFunc();
                             }
-                            setState(() {
-                              
-                            });
+                            setState(() {});
                           },
                         );
                       },
@@ -104,9 +112,7 @@ class _ContactListState extends State<ContactList> {
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        border: Border(
-                        
-                        ),
+                        border: Border(),
                       ),
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -131,8 +137,13 @@ class _ContactListState extends State<ContactList> {
                               ),
                               iconAlignment: Alignment.bottomRight,
                             ),
-                            SizedBox(width: 70.w,
-                              child: Text(_selectedContacts[index].displayName??"",style: TextStyle(overflow: TextOverflow.ellipsis ),))
+                            SizedBox(
+                                width: 70.w,
+                                child: Text(
+                                  _selectedContacts[index].displayName ?? "",
+                                  style: TextStyle(
+                                      overflow: TextOverflow.ellipsis),
+                                ))
                           ],
                         ),
                       ),

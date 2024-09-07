@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:contacts_service/contacts_service.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
+
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
+
+import 'dart:math' as math;
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/file_picker_helper.dart';
 import 'package:info_91_proj/core/variables.dart';
@@ -19,10 +20,9 @@ import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
+
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key});
@@ -44,7 +44,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     ChatMessage(
         message: "Good Morning, Have a Good Day!",
         senderId: "2",
-        time:"1:00 PM",
+        time: "1:00 PM",
         status: MessageStatus.read,
         messageType: MessageType.image,
         isRead: true,
@@ -52,29 +52,47 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     ChatMessage(
         message: "Good Morning !",
         senderId: "1",
-        time:"1:00 PM",
+        time: "1:00 PM",
         isRead: false,
-
-         status: MessageStatus.read,
+        status: MessageStatus.read,
         messageType: MessageType.text,
         dateTime: DateTime.now()),
     ChatMessage(
         message: "https://pub.dev/packages/linkify!",
         senderId: "2",
         isRead: true,
-         status: MessageStatus.delivered,
-         time:"1:00 PM",
+        status: MessageStatus.delivered,
+        time: "1:00 PM",
         messageType: MessageType.text,
         dateTime: DateTime.now()),
     ChatMessage(
         message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
         senderId: "1",
         messageType: MessageType.text,
-        time:"1:00 PM",
+        time: "1:00 PM",
         isRead: false,
-         status: MessageStatus.delivered,
+        status: MessageStatus.delivered,
         dateTime: DateTime.now())
   ];
+
+  void sendMessage(MessageType type, {List<Contact>? contactList}) {
+    messages.insert(
+        0,
+        ChatMessage(
+            messageType: type,
+            message: searchController.text,
+            senderId: "1",
+            contactList: contactList,
+            time: getCurrentTime(),
+            status: MessageStatus.sent,
+            dateTime: DateTime.now()));
+    _scrollController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+    setState(() {});
+  }
 
   TextEditingController searchController = TextEditingController();
   @override
@@ -188,12 +206,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 appBarName: "Information Groups",
               ),
               Expanded(
-                child: 
-                // Container(color: Colors.red,)
-                Align(
+                child:
+                    // Container(color: Colors.red,)
+                    Align(
                   alignment: Alignment.topCenter,
-                  child:
-                   ListView.builder(
+                  child: ListView.builder(
                     controller: _scrollController,
                     itemCount: messages.length,
                     reverse: true,
@@ -202,17 +219,15 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     itemBuilder: (context, index) {
                       final message = messages[index];
                       bool isMe = message.senderId == "1";
-                      msgdate =
-                          formatMessageTimestamp(message.dateTime, index);
-                  
-                      return 
-                      Align(
-                        alignment: isMe
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        child:  
-                        BuildMessageWidget(messageModel: message,)
-                      );
+                      msgdate = formatMessageTimestamp(message.dateTime, index);
+
+                      return Align(
+                          alignment: isMe
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: BuildMessageWidget(
+                            messageModel: message,
+                          ));
                     },
                   ),
                 ),
@@ -227,20 +242,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       width: MediaQuery.of(context).size.width,
                       child: _buildInputField(searchController, searchFocusnOde,
                           () {
-                        messages.insert(
-                            0,
-                            ChatMessage(messageType: MessageType.text,
-                                message: searchController.text,
-                                senderId: "1",
-                                time: getCurrentTime(),
-                                status: MessageStatus.sent,
-                                dateTime: DateTime.now()));
+                        sendMessage(MessageType.text);
                         searchController.clear();
-                        _scrollController.animateTo(
-                          0.0,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
+
                         setState(() {});
                       }),
                     ),
@@ -260,20 +264,25 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   List<Contact> contacts = [];
-String getCurrentTime() {
-  final now = DateTime.now();
-  final formatter = DateFormat.jm(); // This formats the time as '1:00 PM' or '2:30 AM'
-  return formatter.format(now);
-}
+  String getCurrentTime() {
+    final now = DateTime.now();
+    final formatter =
+        DateFormat.jm(); // This formats the time as '1:00 PM' or '2:30 AM'
+    return formatter.format(now);
+  }
+
   Widget _buildEmojiPicker() {
     return EmojiPicker(
         onEmojiSelected: (category, emoji) {
+           
           searchController.text = searchController.text + emoji.emoji;
+          chatController.checkTextFieldEmpty(searchController.text.trim());
         },
         onBackspacePressed: () {
-          // if (searchController.text.isNotEmpty) {
-          //     searchController.text = searchController.text.substring(0, searchController.text.length - 1);
-          //   }
+     if (searchController.text.isNotEmpty) {
+        searchController.text = searchController.text.characters.skipLast(1).toString();
+        chatController.checkTextFieldEmpty(searchController.text.trim());
+      }
         },
         textEditingController: TextEditingController(),
         scrollController: ScrollController(),
@@ -291,6 +300,7 @@ String getCurrentTime() {
           swapCategoryAndBottomBar: false,
           skinToneConfig: const SkinToneConfig(),
           categoryViewConfig: const CategoryViewConfig(
+            
               // Set the background to yellow
               indicatorColor: AppColors.primary,
               iconColorSelected: AppColors.primary),
@@ -342,6 +352,9 @@ String getCurrentTime() {
                       MaterialPageRoute(
                         builder: (context) => ContactList(
                           contacts: Variables.userContact,
+                          onSubmitFunction: (contactList){
+                            print("contactlist$contactList");
+                            sendMessage(MessageType.contact,contactList: contactList);},
                         ),
                       ));
 
@@ -370,7 +383,7 @@ String getCurrentTime() {
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: CircleAvatar(
-            radius: 30,
+            radius: 26.r,
             backgroundColor: color,
             child: Icon(
               icon,
@@ -398,7 +411,8 @@ String getCurrentTime() {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: SizedBox(height: 45.h,
+            child: SizedBox(
+              height: 50.h,
               child: TextField(
                 controller: controller,
                 focusNode: focusnode,
@@ -412,7 +426,8 @@ String getCurrentTime() {
                 decoration: InputDecoration(
                   hintText: 'Type your message here',
                   hintStyle: GoogleFonts.poppins(
-                      fontSize: 12.5.sp, color: AppColors.text.withOpacity(.75)),
+                      fontSize: 12.5.sp,
+                      color: AppColors.text.withOpacity(.75)),
                   filled: true,
                   fillColor: AppColors.google,
                   border: border,
@@ -422,7 +437,7 @@ String getCurrentTime() {
                   prefixIcon: Obx(() => IconButton(
                         icon: Icon(chatController.isEmojiVisible.value
                             ? Icons.keyboard
-                            : Icons.emoji_emotions),
+                            : Icons.sentiment_satisfied_outlined,color: AppColors.primary,size: 24.sp,),
                         onPressed: () {
                           chatController.toggleEmojiPicker();
                           print(chatController.isEmojiVisible.value);
@@ -434,7 +449,7 @@ String getCurrentTime() {
                         },
                       )),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.attach_file),
+                    icon: Icon(Icons.attach_file,color: AppColors.primary,size: 24.sp,),
                     onPressed: chatController.toggleGallery,
                   ),
                 ),
@@ -443,12 +458,13 @@ String getCurrentTime() {
           ),
           Obx(() => IconButton(
                 icon: chatController.isTextFieldEmpty.value
-                    ? Icon(Icons.camera)
-                    : Icon(Icons.send),
+                    ? Icon(Icons.photo_camera_outlined,color: AppColors.primary,size: 24.sp,)
+                    : Icon(Icons.send,color: AppColors.primary, size: 24.sp,),
                 onPressed: () {
                   chatController.isTextFieldEmpty.value
                       ? filePickerHelper.pickFiles("image", context, "")
                       : onSend();
+                      chatController.checkTextFieldEmpty(controller.text.trim());
                 },
               )),
         ],
@@ -457,7 +473,8 @@ String getCurrentTime() {
   }
 }
 
-enum MessageType { text, image, document, audio, video, reply }
+enum MessageType { text, image, document, audio, video, reply, contact }
+
 enum MessageStatus {
   sent,
   delivered,
@@ -471,13 +488,15 @@ class ChatMessage {
   final String time;
   final DateTime dateTime;
   final MessageType messageType;
-   MessageStatus status;
+  MessageStatus status;
   final String? filePath;
+  final List<Contact>? contactList;
 
   ChatMessage({
     required this.dateTime,
     required this.messageType,
     this.filePath,
+    this.contactList,
     required this.time,
     required this.message,
     required this.senderId,
@@ -488,6 +507,12 @@ class ChatMessage {
   // Method to mark the message as read
   ChatMessage markAsRead() {
     return ChatMessage(
-        message: message, senderId: senderId, isRead: true, dateTime: dateTime, messageType: messageType, status: status, time: time);
+        message: message,
+        senderId: senderId,
+        isRead: true,
+        dateTime: dateTime,
+        messageType: messageType,
+        status: status,
+        time: time);
   }
 }

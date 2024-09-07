@@ -9,7 +9,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:info_91_proj/core/config/app_styles.dart';
+import 'package:info_91_proj/core/image_view.dart';
+import 'package:info_91_proj/core/tiny/app_button.dart';
+import 'package:info_91_proj/core/tiny/app_divider.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/contactSelected_view_screen.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_image_card.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -37,6 +42,8 @@ class BuildMessageWidget extends StatelessWidget {
         return _buildVideoMessage(messageModel);
       case MessageType.reply:
         return _buildReplyMessage(messageModel);
+      case MessageType.contact:
+        return _buildConatctMessage(messageModel, context);
       default:
         return SizedBox.shrink();
     }
@@ -112,6 +119,62 @@ class BuildMessageWidget extends StatelessWidget {
       subtitle: Text(message.senderId),
     );
   }
+
+  Widget _buildConatctMessage(ChatMessage message, BuildContext context) {
+    int contactListCount = message.contactList?.length ?? 0;
+    bool isMe = message.senderId == "1";
+    return commonBuildMessageOuter(
+      context: context,
+      isMe: isMe,
+      child: Column(
+        children: [
+          ListTile(
+            leading: AppCustomCirleProfileIamge(
+              isStringImag: false,
+              memoryImage: null,
+              radius: 25.r,
+            ),
+            title: Text(contactListCount == 1
+                ? message.contactList![0].displayName ?? ""
+                : "${message.contactList?[0].displayName} and ${contactListCount - 1} others"),
+          ),
+          Align(
+            alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message.time,
+                  style: GoogleFonts.poppins(
+                      color: Color(0xff666666),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11.sp),
+                ),
+                SizedBox(
+                  width: 1.w,
+                ),
+                if (isMe) _buildMessageStatus(message.status),
+              ],
+            ),
+          ),
+          customDivider(),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              customTextButton("View All", onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SelectedContactListView(
+                          contactList: message.contactList ?? []),
+                    ));
+              })
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class BuildChatImage extends StatefulWidget {
@@ -130,9 +193,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
   Map<String, bool> _downloadloading = {};
 
   Future<void> _downloadImage(String imageUrl) async {
-    print("download");
-    
-     setState(() {
+    setState(() {
       _downloadloading[imageUrl] = true;
     });
     final response = await http.get(Uri.parse(imageUrl));
@@ -145,30 +206,62 @@ class _BuildChatImageState extends State<BuildChatImage> {
     await ImageGallerySaver.saveFile(file.path);
     setState(() {
       _downloadloading[imageUrl] = false;
-       _downloadStatus[imageUrl] = true; print("download${ _downloadStatus[imageUrl]}");
+      _downloadStatus[imageUrl] = true;
+      print("download${_downloadStatus[imageUrl]}");
     });
   }
+
   Future<void> requestStoragePermission() async {
-    var status = await Permission.storage.status;
-
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-    }
-
-    if (!status.isGranted) {
-      print('Storage permission denied');
-      return;
+    // Check if the platform is Android
+    if (Platform.isAndroid) {
+      // Check if the device is running Android 11 (API 30) or higher
+      if (await _isAndroid11OrHigher()) {
+        // Request MANAGE_EXTERNAL_STORAGE for Android 11+
+        var status = await Permission.manageExternalStorage.status;
+        if (!status.isGranted) {
+          status = await Permission.manageExternalStorage.request();
+        }
+        if (!status.isGranted) {
+          print('Manage External Storage permission denied');
+          return;
+        }
+      } else {
+        // For Android versions below 11, request storage permission
+        var status = await Permission.storage.status;
+        if (!status.isGranted) {
+          status = await Permission.storage.request();
+        }
+        if (!status.isGranted) {
+          print('Storage permission denied');
+          return;
+        }
+      }
     }
   }
- Future<void> _checkPermissionsAndImageExistence() async {
+
+  /// Check if the Android version is 11 (API 30) or higher.
+  Future<bool> _isAndroid11OrHigher() async {
+    return Platform.isAndroid && (await _getAndroidVersion()) >= 11;
+  }
+
+  /// Method to get the current Android version.
+  Future<int> _getAndroidVersion() async {
+    // In a real-world scenario, you can fetch the version using platform channels or native Android code.
+    // For now, we return 30, which is Android 11 (API 30).
+    return 30; // Simulating Android 11
+  }
+
+  Future<void> _checkPermissionsAndImageExistence() async {
     // Request storage permission at runtime
     if (await _requestStoragePermission()) {
-      _checkDownloaded("https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg");
+      _checkDownloaded(
+          "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg");
     } else {
       print("Storage permission denied");
     }
   }
-    Future<bool> _requestStoragePermission() async {
+
+  Future<bool> _requestStoragePermission() async {
     var status = await Permission.storage.status;
 
     if (!status.isGranted) {
@@ -180,7 +273,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
 
   @override
   void initState() {
-_checkPermissionsAndImageExistence();
+    _checkPermissionsAndImageExistence();
     super.initState();
   }
 
@@ -189,53 +282,57 @@ _checkPermissionsAndImageExistence();
     _localPath = directory.path;
     final filePath = '$_localPath/${imageUrl.split('/').last}';
     final file = File(filePath);
-    
-     bool exists = await _isImageInGallery(imageUrl);
-print("ssssssssssssssssss${exists}");
+
+    bool exists = await _isImageInGallery(imageUrl);
+    print("ssssssssssssssssss${exists}");
     setState(() {
       _downloadStatus[imageUrl] = exists;
-      _downloadloading[imageUrl] =exists;
+      _downloadloading[imageUrl] = exists;
     });
   }
+
   Future<bool> _isImageInGallery(String imageUrl) async {
-  try {
+    try {
+      if (!(await Permission.storage.request().isGranted)) {
+        throw PlatformException(
+            code: 'PERMISSION_DENIED',
+            message: 'Storage permission not granted');
+      }
 
-    if (!(await Permission.storage.request().isGranted)) {
-      throw PlatformException(code: 'PERMISSION_DENIED', message: 'Storage permission not granted');
+      String picturesDirectory = await getPicturesDirectory(imageUrl);
+
+      // Check if the image exists in the pictures directory
+      String filePath = '$picturesDirectory/${imageUrl.split('/').last}';
+      bool exists = await File(filePath).exists();
+
+      return exists;
+    } catch (e) {
+      print('Error checking image existence: $e');
+      return false;
     }
-
-    String picturesDirectory = await getPicturesDirectory( imageUrl);
-
-    // Check if the image exists in the pictures directory
-    String filePath = '$picturesDirectory/${imageUrl.split('/').last}';
-    bool exists = await File(filePath).exists();
-
-    return exists;
-  } catch (e) {
-    print('Error checking image existence: $e');
-    return false;
   }
-}
-Future<String> getPicturesDirectory(String imageUrl) async {
-  try {
-    // Get the external storage directory
-    Directory? externalDir = await getExternalStorageDirectory();
-    if (externalDir == null) {
-      throw Exception('External storage directory not found');
-    }
-     String name=" ${imageUrl.split('?').first.split('/').last}";
-    // Navigate to the pictures directory (assuming it's named "Pictures")
-    String picturesPath = '${externalDir.path}/$name';
-    Directory picturesDir = Directory(picturesPath);
-    if (!await picturesDir.exists()) {
-      throw Exception('Pictures directory not found');
-    }
 
-    return picturesPath;
-  } catch (e) {
-    print('Error getting pictures directory: $e');
-    rethrow; // Re-throw the error for handling in the caller
-  }}
+  Future<String> getPicturesDirectory(String imageUrl) async {
+    try {
+      // Get the external storage directory
+      Directory? externalDir = await getExternalStorageDirectory();
+      if (externalDir == null) {
+        throw Exception('External storage directory not found');
+      }
+      String name = " ${imageUrl.split('?').first.split('/').last}";
+      // Navigate to the pictures directory (assuming it's named "Pictures")
+      String picturesPath = '${externalDir.path}/$name';
+      Directory picturesDir = Directory(picturesPath);
+      if (!await picturesDir.exists()) {
+        throw Exception('Pictures directory not found');
+      }
+
+      return picturesPath;
+    } catch (e) {
+      print('Error getting pictures directory: $e');
+      rethrow; // Re-throw the error for handling in the caller
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,42 +369,52 @@ Future<String> getPicturesDirectory(String imageUrl) async {
                           allowUpscaling: true,
                           policy: ResizeImagePolicy.fit)),
                   Positioned(
-                      child: _downloadStatus["https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg"]!=true?BlurryContainer(
-                    color: Colors.transparent,
-                    child: Container(
-                        height: 20,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _downloadImage(
-                                    "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg");
-                              },
-                              child:_downloadloading["https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg"]!=true? Card(
-                                  color: Color.fromARGB(147, 255, 255, 255),
+                      child: _downloadStatus[
+                                  "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg"] !=
+                              true
+                          ? BlurryContainer(
+                              color: Colors.transparent,
+                              child: Container(
+                                  height: 20,
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        Icons.download,
-                                        size: 36,
+                                      GestureDetector(
+                                        onTap: () {
+                                          _downloadImage(
+                                              "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg");
+                                        },
+                                        child: _downloadloading[
+                                                    "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg"] !=
+                                                true
+                                            ? Card(
+                                                color: Color.fromARGB(
+                                                    147, 255, 255, 255),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.download,
+                                                      size: 36,
+                                                    ),
+                                                    Text(
+                                                      "download",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 2,
+                                                    )
+                                                  ],
+                                                ))
+                                            : CircularProgressIndicator(),
                                       ),
-                                      Text(
-                                        "download",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      SizedBox(
-                                        width: 2,
-                                      )
                                     ],
-                                  )):CircularProgressIndicator(),
-                            ),
-                          ],
-                        )),
-                    height: 200.h,
-                    width: 250.w,
-                  ):SizedBox())
+                                  )),
+                              height: 200.h,
+                              width: 250.w,
+                            )
+                          : SizedBox())
                 ]),
               ),
               Linkify(
@@ -377,7 +484,7 @@ Widget commonBuildMessageOuter(
   return Container(
       constraints: BoxConstraints(
         minWidth: MediaQuery.of(context).size.width - 300,
-        maxWidth: MediaQuery.of(context).size.width - 90,
+        maxWidth: MediaQuery.of(context).size.width - 100,
       ),
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),

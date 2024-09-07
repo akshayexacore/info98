@@ -18,9 +18,7 @@ class SplashController extends GetxController {
 
   void gotoHomePage() async {
     String token = await _authRepository.getAccessToken();
-    if (token.isNotEmpty) {
-      _requestContactPermission();
-    }
+     _requestContactPermission();
     isBusy(true);
     await Future.delayed(const Duration(seconds: 3)).then((value) {
       Get.find<AuthController>().gotoLandingPage();
