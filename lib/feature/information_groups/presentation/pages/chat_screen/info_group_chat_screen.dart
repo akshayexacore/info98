@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,6 +18,7 @@ import 'package:info_91_proj/core/widgets.dart/custom_common_appbar.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/contact_list.dart';
+import 'package:info_91_proj/feature/information_groups/presentation/pages/map_scelction_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -310,7 +312,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ),
           searchViewConfig: const SearchViewConfig(
               backgroundColor: AppColors.primary,
-              buttonColor: AppColors.white,
+              
               buttonIconColor: AppColors.white),
         ));
   }
@@ -365,10 +367,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     text: "Contacts",
                     color: AppColors.secondary),
               ),
-              iconCreation(
-                  icon: Icons.location_pin,
-                  text: "Location",
-                  color: AppColors.secondary),
+              InkWell(
+                onTap: ()async{
+                     Position position = await  LocationService().  getCurrentLocation();
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapSelectionScreen(position: position,),
+                      ));
+                },
+                child: iconCreation(
+                    icon: Icons.location_pin,
+                    text: "Location",
+                
+                    color: AppColors.secondary),
+              ),
             ],
           ),
         ],
