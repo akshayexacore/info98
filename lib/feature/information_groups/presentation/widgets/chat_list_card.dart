@@ -101,7 +101,7 @@ class ContactListCard extends StatelessWidget {
         trailing: leadingWidget ??
             CustomCircleIconWidget(
               onCange: onCange,
-              backgroundClr: value ? AppColors.secondary : Colors.red,
+              backgroundClr: value ? AppColors.secondary : Color(0xffD9D9D9),
               radius: 12.5,
               iconColor: value ? AppColors.white : Colors.transparent,
             ),
