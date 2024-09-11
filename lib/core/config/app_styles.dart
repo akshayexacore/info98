@@ -214,6 +214,7 @@ class AppButtonStyles {
 }
 
 class AppColors {
+  static const transparent=Colors.transparent;
   static const primary = Color(0xFF262262);
   static const secondary = Color(0xffFF7500);
   static const primaryAccent = primary;

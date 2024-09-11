@@ -4,7 +4,6 @@ import 'package:contacts_service/contacts_service.dart';
 
 import 'package:flutter/material.dart';
 
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +21,6 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
 import 'package:intl/intl.dart';
-
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key});
@@ -145,6 +143,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
   }
 
+  messageOntapfunction(int index, {bool isOntap = false}) {
+    messages[index] =
+        messages[index].copyWith(isSelcted:isOntap?false: !messages[index].isSelcted);
+    setState(() {});
+  }
+
   Widget buildShowDate() {
     print("fghjjghj$msgdate");
     return AnimatedBuilder(
@@ -221,13 +225,35 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       bool isMe = message.senderId == "1";
                       msgdate = formatMessageTimestamp(message.dateTime, index);
 
-                      return Align(
-                          alignment: isMe
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: BuildMessageWidget(
-                            messageModel: message,
-                          ));
+                      return InkWell(
+                        highlightColor: AppColors.transparent,
+                        splashColor: AppColors.transparent,
+                        onTap: (){
+                          
+                          messageOntapfunction(index,isOntap: true);
+                        },
+                        onLongPress: () {
+                          messageOntapfunction(index);
+                        },
+                        child: Stack(
+                          children: [
+                            Align(
+                                alignment: isMe
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: BuildMessageWidget(
+                                  messageModel: message,
+                                )),
+                            Positioned.fill(
+                              child: Container(
+                                color: messages[index].isSelcted
+                                    ? Colors.green.withOpacity(.3)
+                                    : Colors.transparent,
+                              ),
+                            )
+                          ],
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -274,15 +300,15 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget _buildEmojiPicker() {
     return EmojiPicker(
         onEmojiSelected: (category, emoji) {
-           
           searchController.text = searchController.text + emoji.emoji;
           chatController.checkTextFieldEmpty(searchController.text.trim());
         },
         onBackspacePressed: () {
-     if (searchController.text.isNotEmpty) {
-        searchController.text = searchController.text.characters.skipLast(1).toString();
-        chatController.checkTextFieldEmpty(searchController.text.trim());
-      }
+          if (searchController.text.isNotEmpty) {
+            searchController.text =
+                searchController.text.characters.skipLast(1).toString();
+            chatController.checkTextFieldEmpty(searchController.text.trim());
+          }
         },
         textEditingController: TextEditingController(),
         scrollController: ScrollController(),
@@ -300,7 +326,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           swapCategoryAndBottomBar: false,
           skinToneConfig: const SkinToneConfig(),
           categoryViewConfig: const CategoryViewConfig(
-            
+
               // Set the background to yellow
               indicatorColor: AppColors.primary,
               iconColorSelected: AppColors.primary),
@@ -310,7 +336,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ),
           searchViewConfig: const SearchViewConfig(
               backgroundColor: AppColors.primary,
-              
               buttonIconColor: AppColors.white),
         ));
   }
@@ -352,9 +377,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       MaterialPageRoute(
                         builder: (context) => ContactList(
                           contacts: Variables.userContact,
-                          onSubmitFunction: (contactList){
+                          onSubmitFunction: (contactList) {
                             print("contactlist$contactList");
-                            sendMessage(MessageType.contact,contactList: contactList);},
+                            sendMessage(MessageType.contact,
+                                contactList: contactList);
+                          },
                         ),
                       ));
 
@@ -435,9 +462,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   enabledBorder: border,
                   focusedBorder: border,
                   prefixIcon: Obx(() => IconButton(
-                        icon: Icon(chatController.isEmojiVisible.value
-                            ? Icons.keyboard
-                            : Icons.sentiment_satisfied_outlined,color: AppColors.primary,size: 24.sp,),
+                        icon: Icon(
+                          chatController.isEmojiVisible.value
+                              ? Icons.keyboard
+                              : Icons.sentiment_satisfied_outlined,
+                          color: AppColors.primary,
+                          size: 24.sp,
+                        ),
                         onPressed: () {
                           chatController.toggleEmojiPicker();
                           print(chatController.isEmojiVisible.value);
@@ -449,7 +480,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         },
                       )),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.attach_file,color: AppColors.primary,size: 24.sp,),
+                    icon: Icon(
+                      Icons.attach_file,
+                      color: AppColors.primary,
+                      size: 24.sp,
+                    ),
                     onPressed: chatController.toggleGallery,
                   ),
                 ),
@@ -458,13 +493,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ),
           Obx(() => IconButton(
                 icon: chatController.isTextFieldEmpty.value
-                    ? Icon(Icons.photo_camera_outlined,color: AppColors.primary,size: 24.sp,)
-                    : Icon(Icons.send,color: AppColors.primary, size: 24.sp,),
+                    ? Icon(
+                        Icons.photo_camera_outlined,
+                        color: AppColors.primary,
+                        size: 24.sp,
+                      )
+                    : Icon(
+                        Icons.send,
+                        color: AppColors.primary,
+                        size: 24.sp,
+                      ),
                 onPressed: () {
                   chatController.isTextFieldEmpty.value
                       ? filePickerHelper.pickFiles("image", context, "")
                       : onSend();
-                      chatController.checkTextFieldEmpty(controller.text.trim());
+                  chatController.checkTextFieldEmpty(controller.text.trim());
                 },
               )),
         ],
@@ -490,6 +533,7 @@ class ChatMessage {
   final MessageType messageType;
   MessageStatus status;
   final String? filePath;
+  final bool isSelcted;
   final List<Contact>? contactList;
 
   ChatMessage({
@@ -498,11 +542,38 @@ class ChatMessage {
     this.filePath,
     this.contactList,
     required this.time,
+    this.isSelcted = false,
     required this.message,
     required this.senderId,
     required this.status,
     this.isRead = false,
   });
+
+  ChatMessage copyWith({
+    String? message,
+    String? senderId,
+    bool? isRead,
+    String? time,
+    DateTime? dateTime,
+    MessageType? messageType,
+    MessageStatus? status,
+    String? filePath,
+    bool? isSelcted,
+    List<Contact>? contactList,
+  }) {
+    return ChatMessage(
+      message: message ?? this.message,
+      senderId: senderId ?? this.senderId,
+      isRead: isRead ?? this.isRead,
+      time: time ?? this.time,
+      dateTime: dateTime ?? this.dateTime,
+      messageType: messageType ?? this.messageType,
+      status: status ?? this.status,
+      filePath: filePath ?? this.filePath,
+      isSelcted: isSelcted ?? this.isSelcted,
+      contactList: contactList ?? this.contactList,
+    );
+  }
 
   // Method to mark the message as read
   ChatMessage markAsRead() {
@@ -512,6 +583,7 @@ class ChatMessage {
         isRead: true,
         dateTime: dateTime,
         messageType: messageType,
+        isSelcted: this.isSelcted,
         status: status,
         time: time);
   }
