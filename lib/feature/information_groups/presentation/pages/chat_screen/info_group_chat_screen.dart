@@ -310,7 +310,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ),
           searchViewConfig: const SearchViewConfig(
               backgroundColor: AppColors.primary,
-              buttonColor: AppColors.white,
+              
               buttonIconColor: AppColors.white),
         ));
   }

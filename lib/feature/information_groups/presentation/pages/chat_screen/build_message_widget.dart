@@ -14,7 +14,7 @@ import 'package:info_91_proj/core/tiny/app_button.dart';
 import 'package:info_91_proj/core/tiny/app_divider.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/contactSelected_view_screen.dart';
-import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_image_card.dart';
+
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/texts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
