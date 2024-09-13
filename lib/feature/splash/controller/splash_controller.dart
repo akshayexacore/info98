@@ -28,7 +28,7 @@ class SplashController extends GetxController {
 
   Future<void> _requestContactPermission() async {
     if (await Permission.contacts.request().isGranted) {
-      print('Contact permission get');
+      
       fetchContacts();
     } else {
       print('Contact permission denied');
@@ -38,8 +38,7 @@ class SplashController extends GetxController {
   Future<void> fetchContacts() async {
     try {
       final Iterable<Contact> contacts = await ContactsService.getContacts();
-      print('Contact permission ge2t${contacts}');
-
+      
       Variables.userContact = contacts.toList();
     } catch (e) {
       print('Error fetching contacts: $e');
