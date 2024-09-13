@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:contacts_service/contacts_service.dart';
 
@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'dart:math' as math;
+
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/file_picker_helper.dart';
 import 'package:info_91_proj/core/variables.dart';
@@ -19,6 +19,7 @@ import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_
 import 'package:info_91_proj/feature/information_groups/presentation/pages/profile_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
 
 import 'package:intl/intl.dart';
 
@@ -147,10 +148,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     messages[index] =
         messages[index].copyWith(isSelcted:isOntap?false: !messages[index].isSelcted);
     setState(() {});
+    messageSelectedcount();
+  }
+
+ int  messageSelectedcount(){
+int selectedCount=0;
+selectedCount=messages.fold(0, (i,f)=>f.isSelcted?i+1:i);
+setState(() {
+  
+});
+return selectedCount;
+
   }
 
   Widget buildShowDate() {
-    print("fghjjghj$msgdate");
+   
     return AnimatedBuilder(
         animation: _animation!,
         builder: (context, child) {
@@ -198,7 +210,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           body: Column(
             children: [
               CustomAppBar(
-                isPic: true,
+                isPic:messageSelectedcount()!=0?false: true,
                 imageUrl: "",
                 imageOntap: () {
                   Navigator.push(
@@ -207,7 +219,16 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         builder: (context) => ProfileScreen(),
                       ));
                 },
-                appBarName: "Information Groups",
+                appBarName:messageSelectedcount()!=0?messageSelectedcount().toString(): "Information Groups",
+                actionWidget: [
+                  if(messageSelectedcount()!=0)...[
+                    CustomPopupmenu(onSelected: (){
+
+                    }, itemList:  [popupMenuModel(name: "Copy", value: 1)])
+
+                  ]
+
+                ],
               ),
               Expanded(
                 child:
@@ -229,7 +250,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         highlightColor: AppColors.transparent,
                         splashColor: AppColors.transparent,
                         onTap: (){
-                          
                           messageOntapfunction(index,isOntap: true);
                         },
                         onLongPress: () {
