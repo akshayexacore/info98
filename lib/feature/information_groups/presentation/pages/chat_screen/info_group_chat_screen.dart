@@ -22,6 +22,7 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
 
 import 'package:intl/intl.dart';
+import 'package:xid/xid.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key});
@@ -42,6 +43,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   List<ChatMessage> messages = [
     ChatMessage(
         message: "Good Morning, Have a Good Day!",
+        id: "1",
         senderId: "2",
         time: "1:00 PM",
         status: MessageStatus.read,
@@ -51,6 +53,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     ChatMessage(
         message: "Good Morning !",
         senderId: "1",
+        id:" 2",
         time: "1:00 PM",
         isRead: false,
         status: MessageStatus.read,
@@ -60,6 +63,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         message: "https://pub.dev/packages/linkify!",
         senderId: "2",
         isRead: true,
+        id: "3",
         status: MessageStatus.delivered,
         time: "1:00 PM",
         messageType: MessageType.text,
@@ -69,18 +73,22 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         senderId: "1",
         messageType: MessageType.text,
         time: "1:00 PM",
+        id: "4",
         isRead: false,
         status: MessageStatus.delivered,
         dateTime: DateTime.now())
   ];
 
   void sendMessage(MessageType type, {List<Contact>? contactList}) {
-    messages.insert(
+    var xid=Xid();
+    print(xid);
+        messages.insert(
         0,
         ChatMessage(
             messageType: type,
             message: searchController.text,
             senderId: "1",
+            id: "$xid",
             contactList: contactList,
             time: getCurrentTime(),
             status: MessageStatus.sent,
@@ -209,6 +217,7 @@ return selectedCount;
         child: Scaffold(
           body: Column(
             children: [
+              //AppBAr
               CustomAppBar(
                 isPic:messageSelectedcount()!=0?false: true,
                 imageUrl: "",
@@ -222,9 +231,22 @@ return selectedCount;
                 appBarName:messageSelectedcount()!=0?messageSelectedcount().toString(): "Information Groups",
                 actionWidget: [
                   if(messageSelectedcount()!=0)...[
-                    CustomPopupmenu(onSelected: (){
+                    CustomPopupmenu(onSelected: (value){
+                      if(value==1){
 
-                    }, itemList:  [popupMenuModel(name: "Copy", value: 1)])
+                      }
+                      if(value==2){
+                        messages.removeWhere((item)=>item.isSelcted==true);
+                        setState(() {
+                          
+
+                        });
+
+
+                      }
+
+
+                    }, itemList:  [popupMenuModel(name:messageSelectedcount()==1? "Copy":"Delete", value:messageSelectedcount()==1? 1:2)])
 
                   ]
 
@@ -545,18 +567,23 @@ enum MessageStatus {
 }
 
 class ChatMessage {
+    final String id;
   final String message;
   final String senderId;
   final bool isRead;
   final String time;
   final DateTime dateTime;
+
   final MessageType messageType;
   MessageStatus status;
   final String? filePath;
   final bool isSelcted;
+  final bool? isReplay;
   final List<Contact>? contactList;
 
-  ChatMessage({
+  ChatMessage( {
+    this.isReplay,
+    required this.id,
     required this.dateTime,
     required this.messageType,
     this.filePath,
@@ -579,12 +606,15 @@ class ChatMessage {
     MessageStatus? status,
     String? filePath,
     bool? isSelcted,
+    bool? isReplay,
     List<Contact>? contactList,
   }) {
     return ChatMessage(
       message: message ?? this.message,
       senderId: senderId ?? this.senderId,
       isRead: isRead ?? this.isRead,
+      id:id??this.id,
+      isReplay: isReplay??this.isReplay,
       time: time ?? this.time,
       dateTime: dateTime ?? this.dateTime,
       messageType: messageType ?? this.messageType,
@@ -602,6 +632,7 @@ class ChatMessage {
         senderId: senderId,
         isRead: true,
         dateTime: dateTime,
+        id: id,
         messageType: messageType,
         isSelcted: this.isSelcted,
         status: status,
