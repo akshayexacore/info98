@@ -19,7 +19,6 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:info_91_proj/feature/information_groups/presentation/widgets/custom_popupmenu.dart';
 
 import 'package:intl/intl.dart';
-import 'package:xid/xid.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key});
@@ -153,6 +152,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       : "Information Groups",
                   actionWidget: [
                     if (chatController.messageSelectedcount() != 0) ...[
+                      if(chatController.checkOnlySelectedMessageIsText())IconButton(onPressed: (){
+                        chatController.copySelectedMessages(context);
+                      }, icon:Icon(Icons.copy),color: AppColors.white, ),
                       CustomPopupmenu(
                           onSelected: (value) {
                             if (value == 1) {}

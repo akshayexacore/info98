@@ -60,7 +60,7 @@ class BuildMessageWidget extends StatelessWidget {
           Linkify(
             linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
             onOpen: (link) async {
-              print("workingszssssssssssssssssssssssssssssssss");
+           
               if (!await launchUrl(Uri.parse(link.url))) {
                 throw Exception('Could not launch ${link.url}');
               }

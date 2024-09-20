@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:contacts_service/contacts_service.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,8 +15,8 @@ class ChatScreenController extends GetxController {
   RxBool isGalleryVisible = false.obs;
   final ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
-  var selcetMessage = <ChatMessage>[].obs;
-  
+  var selectedMessage = <ChatMessage>[].obs;
+
   RxList<ChatMessage> messages = [
     ChatMessage(
         message: "Good Morning, Have a Good Day!",
@@ -118,10 +119,23 @@ class ChatScreenController extends GetxController {
   }
 
   messageOntapfunction(int index, {bool isOntap = false}) {
+    
+
+
+    if (isOntap && messages[index].isSelcted==true) {
+     
+      selectedMessage.removeWhere((message){
+     
+       return messages[index].id==message.id;
+      });
+    }else{    if (selectedMessage.contains(messages[index].id)) {
+    selectedMessage.removeWhere((message)=> messages[index].id==message.id);
+    } else {
+      selectedMessage.add(messages[index]);
+    }}
     messages[index] = messages[index]
         .copyWith(isSelcted: isOntap ? false : !messages[index].isSelcted);
-
-    messageSelectedcount();
+    print(selectedMessage);
   }
 
   int messageSelectedcount() {
@@ -129,5 +143,35 @@ class ChatScreenController extends GetxController {
     selectedCount = messages.fold(0, (i, f) => f.isSelcted ? i + 1 : i);
 
     return selectedCount;
+  }
+
+  //selected message only contain text checkig function
+  bool checkOnlySelectedMessageIsText() {
+    for (var message in selectedMessage) {
+      if (message.messageType != MessageType.text) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void copySelectedMessages(BuildContext context) {
+    print("object${checkOnlySelectedMessageIsText()}");
+    if (checkOnlySelectedMessageIsText()) {
+     
+      String copiedText = selectedMessage
+          .map((id) => id.message)
+          .join('\n');
+           print("object$copiedText");
+      Clipboard.setData(ClipboardData(text: copiedText));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Messages copied')),
+      );
+
+      selectedMessage.clear();
+for(var i=0;i<messages.length;i++){
+  messages[i]=messages[i].copyWith(isSelcted: false);
+}
+    }
   }
 }
