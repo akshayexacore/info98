@@ -1,15 +1,22 @@
 import 'dart:io';
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info_91_proj/feature/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:xid/xid.dart';
 
 class ChatScreenController extends GetxController {
   var isEmojiVisible = false.obs;
   RxBool isGalleryVisible = false.obs;
-   RxList<ChatMessage> messages = [
+  final ScrollController scrollController = ScrollController();
+  TextEditingController searchController = TextEditingController();
+  var selcetMessage = <ChatMessage>[].obs;
+  
+  RxList<ChatMessage> messages = [
     ChatMessage(
         message: "Good Morning, Have a Good Day!",
         id: "1",
@@ -22,7 +29,7 @@ class ChatScreenController extends GetxController {
     ChatMessage(
         message: "Good Morning !",
         senderId: "1",
-        id:" 2",
+        id: " 2",
         time: "1:00 PM",
         isRead: false,
         status: MessageStatus.read,
@@ -48,25 +55,21 @@ class ChatScreenController extends GetxController {
         dateTime: DateTime.now())
   ].obs;
 
-
-
-  
   final picker = ImagePicker();
   var isTextFieldEmpty = true.obs;
 
   void toggleEmojiPicker() {
     isEmojiVisible.value = !isEmojiVisible.value;
-    
+
     if (isEmojiVisible.value) {
       isGalleryVisible.value = false;
     }
-   
   }
- 
 
   void checkTextFieldEmpty(String text) {
     isTextFieldEmpty.value = text.trim().isEmpty;
   }
+
   void toggleGallery() {
     isGalleryVisible.value = !isGalleryVisible.value;
     if (isGalleryVisible.value) {
@@ -77,9 +80,54 @@ class ChatScreenController extends GetxController {
   void hideEmojiPicker() {
     isEmojiVisible.value = false;
   }
-bool isTextfielIsEmty(String val){
-  return val.isEmpty;}
+
+  bool isTextfielIsEmty(String val) {
+    return val.isEmpty;
+  }
+
   void hideGallery() {
     isGalleryVisible.value = false;
   } //imageanddocumenandvideoselctionfunction var imageFile = Rx<File?>(null);
+
+  void sendMessage(MessageType type, {List<Contact>? contactList}) {
+    var xid = Xid();
+    print(xid);
+    messages.insert(
+        0,
+        ChatMessage(
+            messageType: type,
+            message: searchController.text,
+            senderId: "1",
+            id: "$xid",
+            contactList: contactList,
+            time: getCurrentTime(),
+            status: MessageStatus.sent,
+            dateTime: DateTime.now()));
+    scrollController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  String getCurrentTime() {
+    final now = DateTime.now();
+    final formatter =
+        DateFormat.jm(); // This formats the time as '1:00 PM' or '2:30 AM'
+    return formatter.format(now);
+  }
+
+  messageOntapfunction(int index, {bool isOntap = false}) {
+    messages[index] = messages[index]
+        .copyWith(isSelcted: isOntap ? false : !messages[index].isSelcted);
+
+    messageSelectedcount();
+  }
+
+  int messageSelectedcount() {
+    int selectedCount = 0;
+    selectedCount = messages.fold(0, (i, f) => f.isSelcted ? i + 1 : i);
+
+    return selectedCount;
+  }
 }

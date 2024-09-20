@@ -1,5 +1,3 @@
-
-
 import 'package:contacts_service/contacts_service.dart';
 
 import 'package:flutter/material.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 import 'package:info_91_proj/core/config/app_styles.dart';
 import 'package:info_91_proj/core/file_picker_helper.dart';
@@ -35,73 +32,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final ChatScreenController chatController = Get.put(ChatScreenController());
   FocusNode searchFocusnOde = FocusNode();
   FilePickerHelper filePickerHelper = FilePickerHelper();
-  final ScrollController _scrollController = ScrollController();
+
   Animation<Offset>? _animation;
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;
   String msgdate = '';
-  List<ChatMessage> messages = [
-    ChatMessage(
-        message: "Good Morning, Have a Good Day!",
-        id: "1",
-        senderId: "2",
-        time: "1:00 PM",
-        status: MessageStatus.read,
-        messageType: MessageType.image,
-        isRead: true,
-        dateTime: DateTime.now()),
-    ChatMessage(
-        message: "Good Morning !",
-        senderId: "1",
-        id:" 2",
-        time: "1:00 PM",
-        isRead: false,
-        status: MessageStatus.read,
-        messageType: MessageType.text,
-        dateTime: DateTime.now()),
-    ChatMessage(
-        message: "https://pub.dev/packages/linkify!",
-        senderId: "2",
-        isRead: true,
-        id: "3",
-        status: MessageStatus.delivered,
-        time: "1:00 PM",
-        messageType: MessageType.text,
-        dateTime: DateTime.now()),
-    ChatMessage(
-        message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
-        senderId: "1",
-        messageType: MessageType.text,
-        time: "1:00 PM",
-        id: "4",
-        isRead: false,
-        status: MessageStatus.delivered,
-        dateTime: DateTime.now())
-  ];
 
-  void sendMessage(MessageType type, {List<Contact>? contactList}) {
-    var xid=Xid();
-    print(xid);
-        messages.insert(
-        0,
-        ChatMessage(
-            messageType: type,
-            message: searchController.text,
-            senderId: "1",
-            id: "$xid",
-            contactList: contactList,
-            time: getCurrentTime(),
-            status: MessageStatus.sent,
-            dateTime: DateTime.now()));
-    _scrollController.animateTo(
-      0.0,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-    setState(() {});
-  }
-
-  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -152,25 +88,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
   }
 
-  messageOntapfunction(int index, {bool isOntap = false}) {
-    messages[index] =
-        messages[index].copyWith(isSelcted:isOntap?false: !messages[index].isSelcted);
-    setState(() {});
-    messageSelectedcount();
-  }
-
- int  messageSelectedcount(){
-int selectedCount=0;
-selectedCount=messages.fold(0, (i,f)=>f.isSelcted?i+1:i);
-setState(() {
-  
-});
-return selectedCount;
-
-  }
-
   Widget buildShowDate() {
-   
     return AnimatedBuilder(
         animation: _animation!,
         builder: (context, child) {
@@ -214,117 +132,125 @@ return selectedCount;
           ;
           return Future.value(false);
         },
-        child: Scaffold(
-          body: Column(
-            children: [
-              //AppBAr
-              CustomAppBar(
-                isPic:messageSelectedcount()!=0?false: true,
-                imageUrl: "",
-                imageOntap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(),
-                      ));
-                },
-                appBarName:messageSelectedcount()!=0?messageSelectedcount().toString(): "Information Groups",
-                actionWidget: [
-                  if(messageSelectedcount()!=0)...[
-                    CustomPopupmenu(onSelected: (value){
-                      if(value==1){
-
-                      }
-                      if(value==2){
-                        messages.removeWhere((item)=>item.isSelcted==true);
-                        setState(() {
-                          
-
-                        });
-
-
-                      }
-
-
-                    }, itemList:  [popupMenuModel(name:messageSelectedcount()==1? "Copy":"Delete", value:messageSelectedcount()==1? 1:2)])
-
-                  ]
-
-                ],
-              ),
-              Expanded(
-                child:
-                    // Container(color: Colors.red,)
-                    Align(
-                  alignment: Alignment.topCenter,
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: messages.length,
-                    reverse: true,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final message = messages[index];
-                      bool isMe = message.senderId == "1";
-                      msgdate = formatMessageTimestamp(message.dateTime, index);
-
-                      return InkWell(
-                        highlightColor: AppColors.transparent,
-                        splashColor: AppColors.transparent,
-                        onTap: (){
-                          messageOntapfunction(index,isOntap: true);
-                        },
-                        onLongPress: () {
-                          messageOntapfunction(index);
-                        },
-                        child: Stack(
-                          children: [
-                            Align(
-                                alignment: isMe
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: BuildMessageWidget(
-                                  messageModel: message,
-                                )),
-                            Positioned.fill(
-                              child: Container(
-                                color: messages[index].isSelcted
-                                    ? Colors.green.withOpacity(.3)
-                                    : Colors.transparent,
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(5),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(color: AppColors.white),
-                child: Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: _buildInputField(searchController, searchFocusnOde,
-                          () {
-                        sendMessage(MessageType.text);
-                        searchController.clear();
-
-                        setState(() {});
-                      }),
-                    ),
-                    Obx(() => chatController.isEmojiVisible.value
-                        ? _buildEmojiPicker()
-                        : chatController.isGalleryVisible.value
-                            ? bottomSheet(context)
-                            : Container()),
+        child: Obx(
+          () => Scaffold(
+            body: Column(
+              children: [
+                //AppBAr
+                CustomAppBar(
+                  isPic:
+                      chatController.messageSelectedcount() != 0 ? false : true,
+                  imageUrl: "",
+                  imageOntap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ));
+                  },
+                  appBarName: chatController.messageSelectedcount() != 0
+                      ? chatController.messageSelectedcount().toString()
+                      : "Information Groups",
+                  actionWidget: [
+                    if (chatController.messageSelectedcount() != 0) ...[
+                      CustomPopupmenu(
+                          onSelected: (value) {
+                            if (value == 1) {}
+                            if (value == 2) {
+                              chatController.messages.removeWhere(
+                                  (item) => item.isSelcted == true);
+                            }
+                          },
+                          itemList: [
+                            popupMenuModel(
+                                name: chatController.messageSelectedcount() == 1
+                                    ? "Copy"
+                                    : "Delete",
+                                value:
+                                    chatController.messageSelectedcount() == 1
+                                        ? 1
+                                        : 2)
+                          ])
+                    ]
                   ],
                 ),
-              ),
-            ],
+                Expanded(
+                  child:
+                      // Container(color: Colors.red,)
+                      Align(
+                    alignment: Alignment.topCenter,
+                    child: ListView.builder(
+                      controller: chatController.scrollController,
+                      itemCount: chatController.messages.length,
+                      reverse: true,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final message = chatController.messages[index];
+                        bool isMe = message.senderId == "1";
+                        msgdate =
+                            formatMessageTimestamp(message.dateTime, index);
+
+                        return InkWell(
+                          highlightColor: AppColors.transparent,
+                          splashColor: AppColors.transparent,
+                          onTap: () {
+                            chatController.messageOntapfunction(index,
+                                isOntap: true);
+                          },
+                          onLongPress: () {
+                            chatController.messageOntapfunction(index);
+                          },
+                          child: Stack(
+                            children: [
+                              Align(
+                                  alignment: isMe
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  child: BuildMessageWidget(
+                                    messageModel: message,
+                                  )),
+                              if (chatController.messages[index].isSelcted)
+                                Positioned.fill(
+                                  child: Container(
+                                      color:
+                                          const Color.fromRGBO(76, 175, 80, 1)
+                                              .withOpacity(.3)),
+                                )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(color: AppColors.white),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: _buildInputField(
+                            chatController.searchController, searchFocusnOde,
+                            () {
+                          chatController.sendMessage(MessageType.text);
+                          chatController.searchController.clear();
+
+                          setState(() {});
+                        }),
+                      ),
+                      Obx(() => chatController.isEmojiVisible.value
+                          ? _buildEmojiPicker()
+                          : chatController.isGalleryVisible.value
+                              ? bottomSheet(context)
+                              : Container()),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -342,14 +268,19 @@ return selectedCount;
   Widget _buildEmojiPicker() {
     return EmojiPicker(
         onEmojiSelected: (category, emoji) {
-          searchController.text = searchController.text + emoji.emoji;
-          chatController.checkTextFieldEmpty(searchController.text.trim());
+          chatController.searchController.text =
+              chatController.searchController.text + emoji.emoji;
+          chatController
+              .checkTextFieldEmpty(chatController.searchController.text.trim());
         },
         onBackspacePressed: () {
-          if (searchController.text.isNotEmpty) {
-            searchController.text =
-                searchController.text.characters.skipLast(1).toString();
-            chatController.checkTextFieldEmpty(searchController.text.trim());
+          if (chatController.searchController.text.isNotEmpty) {
+            chatController.searchController.text = chatController
+                .searchController.text.characters
+                .skipLast(1)
+                .toString();
+            chatController.checkTextFieldEmpty(
+                chatController.searchController.text.trim());
           }
         },
         textEditingController: TextEditingController(),
@@ -421,7 +352,7 @@ return selectedCount;
                           contacts: Variables.userContact,
                           onSubmitFunction: (contactList) {
                             print("contactlist$contactList");
-                            sendMessage(MessageType.contact,
+                            chatController.sendMessage(MessageType.contact,
                                 contactList: contactList);
                           },
                         ),
@@ -567,7 +498,7 @@ enum MessageStatus {
 }
 
 class ChatMessage {
-    final String id;
+  final String id;
   final String message;
   final String senderId;
   final bool isRead;
@@ -581,7 +512,7 @@ class ChatMessage {
   final bool? isReplay;
   final List<Contact>? contactList;
 
-  ChatMessage( {
+  ChatMessage({
     this.isReplay,
     required this.id,
     required this.dateTime,
@@ -613,8 +544,8 @@ class ChatMessage {
       message: message ?? this.message,
       senderId: senderId ?? this.senderId,
       isRead: isRead ?? this.isRead,
-      id:id??this.id,
-      isReplay: isReplay??this.isReplay,
+      id: id ?? this.id,
+      isReplay: isReplay ?? this.isReplay,
       time: time ?? this.time,
       dateTime: dateTime ?? this.dateTime,
       messageType: messageType ?? this.messageType,
