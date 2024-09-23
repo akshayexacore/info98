@@ -118,11 +118,16 @@ class ChatScreenController extends GetxController {
     return formatter.format(now);
   }
 
+//handling both selction and deltion and tap and long press in sllection method
   messageOntapfunction(int index, {bool isOntap = false}) {
-    if (isOntap && messages[index].isSelcted == true) {
-      selectedMessage.removeWhere((message) {
-        return messages[index].id == message.id;
-      });
+    if (isOntap) {
+      if (messages[index].isSelcted == true) {
+        selectedMessage.removeWhere((message) {
+          return messages[index].id == message.id;
+        });
+      } else if (checkSelcetionExist()) {
+        selectedMessage.add(messages[index]);
+      }
     } else {
       if (selectedMessage.contains(messages[index].id)) {
         selectedMessage
@@ -132,7 +137,7 @@ class ChatScreenController extends GetxController {
       }
     }
     messages[index] = messages[index]
-        .copyWith(isSelcted: isOntap ? false : !messages[index].isSelcted);
+        .copyWith(isSelcted: isOntap ?checkSelcetionExist()? !messages[index].isSelcted: false : !messages[index].isSelcted);
     print(selectedMessage);
   }
 
@@ -151,6 +156,15 @@ class ChatScreenController extends GetxController {
       }
     }
     return true;
+  }
+
+  bool checkSelcetionExist() {
+    for (var message in messages) {
+      if (message.isSelcted) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void copySelectedMessages(BuildContext context) {
