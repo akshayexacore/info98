@@ -119,20 +119,18 @@ class ChatScreenController extends GetxController {
   }
 
   messageOntapfunction(int index, {bool isOntap = false}) {
-    
-
-
-    if (isOntap && messages[index].isSelcted==true) {
-     
-      selectedMessage.removeWhere((message){
-     
-       return messages[index].id==message.id;
+    if (isOntap && messages[index].isSelcted == true) {
+      selectedMessage.removeWhere((message) {
+        return messages[index].id == message.id;
       });
-    }else{    if (selectedMessage.contains(messages[index].id)) {
-    selectedMessage.removeWhere((message)=> messages[index].id==message.id);
     } else {
-      selectedMessage.add(messages[index]);
-    }}
+      if (selectedMessage.contains(messages[index].id)) {
+        selectedMessage
+            .removeWhere((message) => messages[index].id == message.id);
+      } else {
+        selectedMessage.add(messages[index]);
+      }
+    }
     messages[index] = messages[index]
         .copyWith(isSelcted: isOntap ? false : !messages[index].isSelcted);
     print(selectedMessage);
@@ -158,20 +156,17 @@ class ChatScreenController extends GetxController {
   void copySelectedMessages(BuildContext context) {
     print("object${checkOnlySelectedMessageIsText()}");
     if (checkOnlySelectedMessageIsText()) {
-     
-      String copiedText = selectedMessage
-          .map((id) => id.message)
-          .join('\n');
-           print("object$copiedText");
+      String copiedText = selectedMessage.map((id) => id.message).join('\n');
+      print("object$copiedText");
       Clipboard.setData(ClipboardData(text: copiedText));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Messages copied')),
       );
 
       selectedMessage.clear();
-for(var i=0;i<messages.length;i++){
-  messages[i]=messages[i].copyWith(isSelcted: false);
-}
+      for (var i = 0; i < messages.length; i++) {
+        messages[i] = messages[i].copyWith(isSelcted: false);
+      }
     }
   }
 }
